@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gewerbeverein Heemsen</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Header & Navigation -->
+    <header class="header" id="header">
+        <div class="container header-container">
+            <a href="#" class="logo">
+                <img src="https://pub-b33108412309406a9a941ddc51e9a5b9.r2.dev/gewerbeverein%20heemsen/Gewerbeverein-Heemsen-Logo.png" alt="Gewerbeverein Heemsen Logo">
+            </a>
+            
+            <nav class="nav-menu" id="nav-menu">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="#" class="nav-link active">Startseite</a></li>
+                    <li class="nav-item"><a href="#aktuelles" class="nav-link">Aktuelles</a></li>
+                    <li class="nav-item"><a href="#termine" class="nav-link">Termine</a></li>
+                    <li class="nav-item"><a href="#mitglieder" class="nav-link">Mitglieder</a></li>
+                    <li class="nav-item"><a href="#ueber-uns" class="nav-link">Über uns</a></li>
+                    <li class="nav-item"><a href="#gafa" class="nav-link">GAFA</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <a href="#mitglied-werden" class="btn btn-outline">Mitglied werden</a>
+                </div>
+            </nav>
+
+            <button class="hamburger" id="hamburger" aria-label="Menü öffnen">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-overlay"></div>
+        <div class="container hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">Gemeinsam stark für Heemsen und die Region</h1>
+                <p class="hero-subtitle">Der Gewerbeverein Heemsen verbindet Unternehmen, Selbstständige und engagierte Menschen aus der Samtgemeinde. Wir schaffen Sichtbarkeit, fördern Austausch und bringen unsere Region mit Veranstaltungen, Aktionen und starken Netzwerken voran.</p>
+                <div class="hero-buttons">
+                    <a href="#mitglied-werden" class="btn btn-primary">Mitglied werden</a>
+                    <a href="#termine" class="btn btn-secondary">Aktuelle Termine ansehen</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Für Mitglieder: Aktuelles & Termine -->
+    <section id="aktuelles" class="section bg-light">
+        <div class="container">
+            <div class="section-header text-center">
+                <span class="section-badge">Für Mitglieder</span>
+                <h2 class="section-title">Immer wissen, was ansteht</h2>
+                <p class="section-description">Ob Jahreshauptversammlung, gemeinsame Fahrt, Vortrag, Netzwerktreffen oder regionale Aktion – auf unserer Website finden Mitglieder alle wichtigen Termine und Neuigkeiten auf einen Blick.</p>
+                <p class="section-highlight">Alles Wichtige aus dem Verein – klar, aktuell und schnell gefunden.</p>
+            </div>
+
+            <div class="members-grid">
+                <!-- Aktuelles Spalte -->
+                <div class="news-column">
+                    <h3 class="column-title"><i class="fa-regular fa-newspaper"></i> Aktuelles</h3>
+                    <div class="news-cards">
+                        <!-- News Card 1 -->
+                        <article class="news-card">
+                            <div class="news-image-placeholder"><i class="fa-solid fa-users"></i></div>
+                            <div class="news-content">
+                                <span class="news-date">15. Mai 2026</span>
+                                <h4 class="news-title">Rückblick: Erfolgreiche Jahreshauptversammlung</h4>
+                                <p class="news-excerpt">Ein spannender Abend mit vielen Mitgliedern und der Wahl des neuen Vorstands.</p>
+                                <a href="#" class="text-link">Weiterlesen <i class="fa-solid fa-arrow-right"></i></a>
+                            </div>
+                        </article>
+                        <!-- News Card 2 -->
+                        <article class="news-card">
+                            <div class="news-image-placeholder"><i class="fa-solid fa-bicycle"></i></div>
+                            <div class="news-content">
+                                <span class="news-date">02. Mai 2026</span>
+                                <h4 class="news-title">Aktion: Die Samtgemeinde Heemsen radelt</h4>
+                                <p class="news-excerpt">Wir laden alle Bürger und Betriebe zur großen gemeinsamen Fahrradtour ein.</p>
+                                <a href="#" class="text-link">Weiterlesen <i class="fa-solid fa-arrow-right"></i></a>
+                            </div>
+                        </article>
+                    </div>
+                    <div class="column-footer">
+                        <a href="#" class="btn btn-outline">Alle News ansehen</a>
+                    </div>
+                </div>
+
+                <!-- Termine Spalte -->
+                <div class="events-column" id="termine">
+                    <h3 class="column-title"><i class="fa-regular fa-calendar-days"></i> Nächste Termine</h3>
+                    <div class="events-list">
+                        <!-- Event 1 -->
+                        <div class="event-item">
+                            <div class="event-date-box">
+                                <span class="event-day">12</span>
+                                <span class="event-month">Jun</span>
+                            </div>
+                            <div class="event-details">
+                                <h4 class="event-title">Netzwerktreffen Handwerk</h4>
+                                <p class="event-meta"><i class="fa-regular fa-clock"></i> 19:00 Uhr | <i class="fa-solid fa-location-dot"></i> Gasthaus Heemsen</p>
+                            </div>
+                        </div>
+                        <!-- Event 2 -->
+                        <div class="event-item">
+                            <div class="event-date-box">
+                                <span class="event-day">28</span>
+                                <span class="event-month">Aug</span>
+                            </div>
+                            <div class="event-details">
+                                <h4 class="event-title">Vortrag: Digitalisierung im Mittelstand</h4>
+                                <p class="event-meta"><i class="fa-regular fa-clock"></i> 18:30 Uhr | <i class="fa-solid fa-location-dot"></i> Vereinsheim</p>
+                            </div>
+                        </div>
+                        <!-- Event 3 -->
+                        <div class="event-item">
+                            <div class="event-date-box">
+                                <span class="event-day">15</span>
+                                <span class="event-month">Okt</span>
+                            </div>
+                            <div class="event-details">
+                                <h4 class="event-title">Gemeinsame Fahrt zur Fachmesse</h4>
+                                <p class="event-meta"><i class="fa-regular fa-clock"></i> 08:00 Uhr | <i class="fa-solid fa-location-dot"></i> ZOB Heemsen</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column-footer">
+                        <a href="#" class="btn btn-outline">Gesamten Kalender ansehen</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Für Unternehmen: Warum Mitglied werden -->
+    <section id="mitglied-werden" class="section">
+        <div class="container">
+            <div class="section-header text-center">
+                <span class="section-badge">Für Unternehmen</span>
+                <h2 class="section-title">Warum Mitglied werden?</h2>
+                <p class="section-description">Als Mitglied im Gewerbeverein Heemsen werden Sie Teil eines aktiven regionalen Netzwerks. Sie profitieren vom Austausch mit anderen Betrieben, gemeinsamer Öffentlichkeitsarbeit, Veranstaltungen und einer stärkeren Sichtbarkeit in der Region.</p>
+                <p class="section-highlight">Wer in der Region etwas bewegen möchte, sollte nicht allein sichtbar sein – sondern gemeinsam.</p>
+            </div>
+
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="benefit-icon"><i class="fa-solid fa-handshake"></i></div>
+                    <h3 class="benefit-title">Regionale Kontakte</h3>
+                    <p class="benefit-text">Vernetzen Sie sich mit Unternehmen und Selbstständigen aus Heemsen und Umgebung.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon"><i class="fa-solid fa-bullhorn"></i></div>
+                    <h3 class="benefit-title">Mehr Sichtbarkeit</h3>
+                    <p class="benefit-text">Steigern Sie Ihre regionale Bekanntheit durch unser großes Mitgliederverzeichnis.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon"><i class="fa-regular fa-comments"></i></div>
+                    <h3 class="benefit-title">Starker Austausch</h3>
+                    <p class="benefit-text">Profitieren Sie vom Wissen und der Erfahrung anderer Gewerbetreibender.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon"><i class="fa-solid fa-calendar-star"></i></div>
+                    <h3 class="benefit-title">Gemeinsame Events</h3>
+                    <p class="benefit-text">Nehmen Sie an exklusiven Vorträgen, Aktionen und Netzwerktreffen teil.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon"><i class="fa-solid fa-rocket"></i></div>
+                    <h3 class="benefit-title">GAFA & Projekte</h3>
+                    <p class="benefit-text">Beteiligen Sie sich aktiv an großen regionalen Projekten und Gewerbeschauen.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon"><i class="fa-solid fa-people-group"></i></div>
+                    <h3 class="benefit-title">Interessenvertretung</h3>
+                    <p class="benefit-text">Eine starke, gemeinsame Stimme für Handel, Handwerk und Dienstleistung vor Ort.</p>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <a href="#" class="btn btn-primary btn-large">Jetzt Mitgliedsantrag herunterladen</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Über uns -->
+    <section id="ueber-uns" class="section bg-dark text-white">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-content">
+                    <span class="section-badge badge-light">Über den Verein</span>
+                    <h2 class="section-title">Seit 1982 für Handel, Handwerk und Dienstleistung vor Ort</h2>
+                    <p class="section-description text-light">Der Gewerbeverein Heemsen wurde gegründet, um zu zeigen, wie viel wirtschaftliche Stärke in der Gemeinde und ihren Ortsteilen steckt. Was mit engagierten Betrieben und der ersten Gewerbeschau begann, ist heute ein lebendiges Netzwerk mit vielen Mitgliedern aus unterschiedlichen Branchen.</p>
+                    <p class="section-highlight text-primary-light">Aus regionaler Verbundenheit wurde ein starkes Netzwerk.</p>
+                    <div class="about-stats">
+                        <div class="stat-item">
+                            <span class="stat-number">1982</span>
+                            <span class="stat-label">Gründungsjahr</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">~85</span>
+                            <span class="stat-label">Aktive Mitglieder</span>
+                        </div>
+                    </div>
+                    <a href="#" class="btn btn-outline-light mt-3">Mehr über den Vorstand erfahren</a>
+                </div>
+                <div class="about-image">
+                    <!-- Platzhalter für ein Bild der Region/Verein -->
+                    <div class="placeholder-img-box">
+                        <i class="fa-solid fa-image"></i>
+                        <span>Impressionen aus Heemsen</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GAFA Teaser -->
+    <section id="gafa" class="section">
+        <div class="container">
+            <div class="gafa-banner">
+                <div class="gafa-content">
+                    <span class="section-badge">Gewerbeschau</span>
+                    <h2 class="section-title">GAFA – Gewerbeschau mit Strahlkraft</h2>
+                    <p class="section-description">Mit der GAFA präsentiert der Gewerbeverein regelmäßig die Vielfalt der Betriebe, Dienstleistungen und Ideen aus der Region. Die Ausstellung bringt Unternehmen, Besucherinnen und Besucher zusammen und zeigt, was Heemsen wirtschaftlich zu bieten hat.</p>
+                    <p class="section-highlight">Hier wird sichtbar, was unsere Region kann.</p>
+                    <div class="gafa-buttons">
+                        <a href="#" class="btn btn-primary">Rückblick GAFA 2024</a>
+                        <a href="#" class="btn btn-outline text-dark">Archiv (2018, 2015) ansehen</a>
+                    </div>
+                </div>
+                <div class="gafa-visual">
+                    <div class="gafa-logo-mock">GAFA</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <img src="https://pub-b33108412309406a9a941ddc51e9a5b9.r2.dev/gewerbeverein%20heemsen/Gewerbeverein-Heemsen-Logo.png" alt="Logo" class="footer-logo">
+                    <p class="footer-text">Gemeinsam stark für Heemsen und die Region. Ihr aktives Netzwerk für Handel, Handwerk und Dienstleistung.</p>
+                </div>
+                <div class="footer-col">
+                    <h4 class="footer-heading">Navigation</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Startseite</a></li>
+                        <li><a href="#aktuelles">Aktuelles & Termine</a></li>
+                        <li><a href="#mitglieder">Mitgliederverzeichnis</a></li>
+                        <li><a href="#mitglied-werden">Mitglied werden</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4 class="footer-heading">Verein</h4>
+                    <ul class="footer-links">
+                        <li><a href="#ueber-uns">Über uns & Vorstand</a></li>
+                        <li><a href="#gafa">GAFA Gewerbeschau</a></li>
+                        <li><a href="#">Interner Bereich</a></li>
+                        <li><a href="#">Kontakt</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4 class="footer-heading">Rechtliches</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Impressum</a></li>
+                        <li><a href="#">Datenschutz</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Gewerbeverein Heemsen e.V. – Alle Rechte vorbehalten.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>
