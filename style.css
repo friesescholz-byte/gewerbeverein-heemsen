@@ -952,6 +952,48 @@ img {
     align-self: flex-start;
 }
 
+/* Pagination */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 60px;
+}
+
+.page-btn {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-color);
+    background: var(--bg-color);
+    color: var(--text-main);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: var(--transition);
+}
+
+.page-btn:hover:not(:disabled) {
+    background: var(--bg-light);
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+.page-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.page-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: var(--bg-light);
+}
+
 /* --- MODAL --- */
 .modal-overlay {
     position: fixed;

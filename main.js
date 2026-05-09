@@ -36,33 +36,37 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Add active class to nav links on scroll (Basic implementation)
+    // Add active class to nav links on scroll (Only on Homepage)
     const sections = document.querySelectorAll('section');
+    const isHomepage = document.getElementById('aktuelles') !== null;
     
-    window.addEventListener('scroll', () => {
-        let current = '';
-        
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.clientHeight;
-            if (pageYOffset >= (sectionTop - sectionHeight / 3)) {
-                current = section.getAttribute('id');
-            }
-        });
+    if (isHomepage) {
+        window.addEventListener('scroll', () => {
+            let current = '';
+            
+            sections.forEach(section => {
+                if (!section.getAttribute('id')) return;
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= (sectionTop - sectionHeight / 3)) {
+                    current = section.getAttribute('id');
+                }
+            });
 
-        navLinks.forEach(link => {
-            link.classList.remove('active');
-            if (link.getAttribute('href').includes(current) && current !== '') {
-                link.classList.add('active');
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').includes('#' + current) && current !== '') {
+                    link.classList.add('active');
+                }
+            });
+            
+            // Fix for startseite when at very top
+            if(window.scrollY < 100) {
+                 navLinks.forEach(link => link.classList.remove('active'));
+                 navLinks[0].classList.add('active');
             }
         });
-        
-        // Fix for startseite when at very top
-        if(window.scrollY < 100) {
-             navLinks.forEach(link => link.classList.remove('active'));
-             navLinks[0].classList.add('active');
-        }
-    });
+    }
 });
 
 // --- News Modal & Slider Logic ---
@@ -202,4 +206,85 @@ document.addEventListener('DOMContentLoaded', () => {
 
     sliderPrevBtn.addEventListener('click', () => goToSlide(currentSlideIndex - 1));
     sliderNextBtn.addEventListener('click', () => goToSlide(currentSlideIndex + 1));
+});
+
+// --- Pagination Logic ---
+document.addEventListener('DOMContentLoaded', () => {
+    const newsGrid = document.querySelector('.news-grid-page');
+    if (!newsGrid) return;
+
+    const cards = Array.from(newsGrid.querySelectorAll('.news-card-large'));
+    const itemsPerPage = 12;
+    let currentPage = 1;
+    const totalPages = Math.ceil(cards.length / itemsPerPage);
+
+    // Create pagination container if it doesn't exist
+    let paginationContainer = document.getElementById('pagination');
+    if (!paginationContainer && totalPages > 1) {
+        paginationContainer = document.createElement('div');
+        paginationContainer.id = 'pagination';
+        paginationContainer.className = 'pagination-container';
+        newsGrid.parentNode.appendChild(paginationContainer);
+    }
+
+    function renderPage(page, scrollToTop = true) {
+        if (page < 1) page = 1;
+        if (page > totalPages) page = totalPages;
+        currentPage = page;
+
+        // Hide all
+        cards.forEach(card => card.style.display = 'none');
+
+        // Show items for current page
+        const start = (page - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+        for (let i = start; i < end && i < cards.length; i++) {
+            cards[i].style.display = 'flex';
+        }
+
+        renderPaginationControls();
+        
+        // Scroll to top of grid when changing page
+        if (scrollToTop) {
+            const yOffset = -100; 
+            const y = newsGrid.getBoundingClientRect().top + window.pageYOffset + yOffset;
+            window.scrollTo({top: y, behavior: 'smooth'});
+        }
+    }
+
+    function renderPaginationControls() {
+        if (!paginationContainer || totalPages <= 1) return;
+        paginationContainer.innerHTML = '';
+
+        // Prev button
+        const prevBtn = document.createElement('button');
+        prevBtn.className = 'page-btn';
+        prevBtn.innerHTML = '<i class="fa-solid fa-chevron-left"></i>';
+        prevBtn.disabled = currentPage === 1;
+        prevBtn.addEventListener('click', (e) => { e.preventDefault(); renderPage(currentPage - 1); });
+        paginationContainer.appendChild(prevBtn);
+
+        // Page buttons
+        for (let i = 1; i <= totalPages; i++) {
+            const pageBtn = document.createElement('button');
+            pageBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+            pageBtn.textContent = i;
+            pageBtn.addEventListener('click', (e) => { e.preventDefault(); renderPage(i); });
+            paginationContainer.appendChild(pageBtn);
+        }
+
+        // Next button
+        const nextBtn = document.createElement('button');
+        nextBtn.className = 'page-btn';
+        nextBtn.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
+        nextBtn.disabled = currentPage === totalPages;
+        nextBtn.addEventListener('click', (e) => { e.preventDefault(); renderPage(currentPage + 1); });
+        paginationContainer.appendChild(nextBtn);
+    }
+
+    // Init
+    if (cards.length > 0) {
+        // Initial render without scrolling
+        renderPage(1, false);
+    }
 });
