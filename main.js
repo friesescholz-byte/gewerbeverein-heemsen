@@ -258,8 +258,18 @@ document.addEventListener('DOMContentLoaded', async () => {
                         safeImages = post.images;
                     }
 
+                    // Parse text blocks to HTML paragraphs if they don't already contain HTML tags
+                    let formattedContent = post.content || '';
+                    if (!formattedContent.includes('<p>') && !formattedContent.includes('<br>')) {
+                        formattedContent = formattedContent
+                            .split(/\n\s*\n/)
+                            .filter(para => para.trim() !== '')
+                            .map(para => `<p>${para.trim().replace(/\n/g, '<br>')}</p>`)
+                            .join('');
+                    }
+
                     hiddenData.innerHTML = `
-                        <div class="news-full-content">${post.content}</div>
+                        <div class="news-full-content">${formattedContent}</div>
                         <div class="news-images-data" data-images='${JSON.stringify(safeImages).replace(/'/g, "&#39;")}'></div>
                     `;
 
