@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mitgliederverzeichnis - Gewerbeverein Heemsen</title>
+    <meta name="description" content="Alle Mitglieder des Gewerbevereins Heemsen im Überblick. Suchen Sie nach Firmen, Branchen und Kontaktdaten.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;500;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome (Icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Header & Navigation -->
+    <header class="header" id="header">
+        <div class="container header-container">
+            <a href="index.html" class="logo">
+                <img src="https://pub-b33108412309406a9a941ddc51e9a5b9.r2.dev/gewerbeverein%20heemsen/Gewerbeverein-Heemsen-Logo.png" alt="Gewerbeverein Heemsen Logo">
+            </a>
+            
+            <nav class="nav-menu" id="nav-menu">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="index.html" class="nav-link">Startseite</a></li>
+                    <li class="nav-item"><a href="aktuelles.html" class="nav-link">Aktuelles</a></li>
+                    <li class="nav-item"><a href="termine.html" class="nav-link">Termine</a></li>
+                    <li class="nav-item"><a href="mitglieder.html" class="nav-link active">Mitglieder</a></li>
+                    <li class="nav-item"><a href="index.html#ueber-uns" class="nav-link">Über uns</a></li>
+                    <li class="nav-item"><a href="index.html#gafa" class="nav-link">GAFA</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <a href="index.html#mitglied-werden" class="btn btn-outline">Mitglied werden</a>
+                </div>
+            </nav>
+
+            <button class="hamburger" id="hamburger" aria-label="Menü öffnen">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Page Hero -->
+    <section class="page-hero">
+        <div class="container">
+            <h1 class="page-title">Unsere Mitglieder</h1>
+            <p class="page-subtitle">Finden Sie den passenden Partner in der Region. Suchen Sie nach Namen oder Branchen.</p>
+            
+            <div class="member-search-container">
+                <div class="search-input-wrapper">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" id="member-search" placeholder="Suche nach Name, Branche oder Stichwort (z.B. Holzbau)...">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Members Grid Section -->
+    <section class="section bg-light">
+        <div class="container">
+            <div class="members-page-grid" id="dynamic-members-page">
+                <!-- Dynamischer Inhalt (Mitglieder) -->
+                <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--text-muted);">
+                    <i class="fa-solid fa-circle-notch fa-spin" style="font-size: 2rem; margin-bottom: 15px; color: var(--primary-color);"></i>
+                    <p>Mitglieder werden geladen...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <img src="https://pub-b33108412309406a9a941ddc51e9a5b9.r2.dev/gewerbeverein%20heemsen/Gewerbeverein-Heemsen-Logo.png" alt="Logo" class="footer-logo">
+                    <p class="footer-text">Gemeinsam stark für Heemsen und die Region. Ihr aktives Netzwerk für Handel, Handwerk und Dienstleistung.</p>
+                </div>
+                <div class="footer-col">
+                    <h4 class="footer-heading">Navigation</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Startseite</a></li>
+                        <li><a href="aktuelles.html">Aktuelles</a></li>
+                        <li><a href="termine.html">Termine</a></li>
+                        <li><a href="mitglieder.html">Mitgliederverzeichnis</a></li>
+                        <li><a href="index.html#mitglied-werden">Mitglied werden</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4 class="footer-heading">Verein</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html#ueber-uns">Über uns & Vorstand</a></li>
+                        <li><a href="index.html#gafa">GAFA Gewerbeschau</a></li>
+                        <li><a href="#">Interner Bereich</a></li>
+                        <li><a href="#">Kontakt</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4 class="footer-heading">Rechtliches</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Impressum</a></li>
+                        <li><a href="#">Datenschutz</a></li>
+                        <li><a href="#">Satzung</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Gewerbeverein Heemsen. Alle Rechte vorbehalten.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="main.js"></script>
+</body>
+</html>

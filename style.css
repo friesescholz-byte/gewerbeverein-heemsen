@@ -1293,3 +1293,144 @@ img {
     margin-top: auto;
 }
 
+
+/* --- MITGLIEDER CSS --- */
+
+.member-search-container {
+    max-width: 600px;
+    margin: 30px auto 0;
+}
+
+.search-input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.search-icon {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888;
+    font-size: 1.2rem;
+}
+
+#member-search {
+    width: 100%;
+    padding: 16px 20px 16px 50px;
+    font-size: 16px;
+    border: none;
+    border-radius: 50px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+    font-family: 'Inter', sans-serif;
+}
+
+#member-search:focus {
+    outline: none;
+    box-shadow: 0 8px 25px rgba(193,18,31,0.15);
+}
+
+.members-page-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 30px;
+    margin-top: -20px; /* Offset to bring it closer to hero */
+}
+
+.member-tile {
+    background: var(--bg-white);
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.04);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border: 1px solid rgba(0,0,0,0.02);
+}
+
+.member-tile:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+}
+
+.member-logo-wrapper {
+    height: 120px;
+    width: 100%;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #f0f0f0;
+}
+
+.member-logo-wrapper img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* Prevents cropping */
+}
+
+.member-name {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.4rem;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.member-details {
+    margin-bottom: 25px;
+    flex-grow: 1;
+}
+
+.member-detail-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+    color: var(--text-color);
+    line-height: 1.5;
+}
+
+.member-detail-item i {
+    color: var(--primary-color);
+    width: 20px;
+    margin-top: 4px;
+    margin-right: 10px;
+    flex-shrink: 0;
+}
+
+.member-detail-item a {
+    color: var(--text-color);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.member-detail-item a:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+.member-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: auto;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+}
+
+.member-tag {
+    background: rgba(193,18,31,0.06);
+    color: var(--primary-color);
+    padding: 6px 14px;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
