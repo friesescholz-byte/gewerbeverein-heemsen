@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aktuelles - Gewerbeverein Heemsen</title>
-    <meta name="description" content="Neuigkeiten, Aktionen und Rückblicke des Gewerbevereins Heemsen.">
+    <title>Termine - Gewerbeverein Heemsen</title>
+    <meta name="description" content="Veranstaltungen, Treffen und wichtige Termine des Gewerbevereins Heemsen.">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -29,8 +29,8 @@
             <nav class="nav-menu" id="nav-menu">
                 <ul class="nav-list">
                     <li class="nav-item"><a href="index.html" class="nav-link">Startseite</a></li>
-                    <li class="nav-item"><a href="aktuelles.html" class="nav-link active">Aktuelles</a></li>
-                    <li class="nav-item"><a href="termine.html" class="nav-link">Termine</a></li>
+                    <li class="nav-item"><a href="aktuelles.html" class="nav-link">Aktuelles</a></li>
+                    <li class="nav-item"><a href="termine.html" class="nav-link active">Termine</a></li>
                     <li class="nav-item"><a href="index.html#mitglieder" class="nav-link">Mitglieder</a></li>
                     <li class="nav-item"><a href="index.html#ueber-uns" class="nav-link">Über uns</a></li>
                     <li class="nav-item"><a href="index.html#gafa" class="nav-link">GAFA</a></li>
@@ -51,49 +51,75 @@
     <!-- Page Hero -->
     <section class="page-hero">
         <div class="container">
-            <h1 class="page-title">Aktuelles & Neuigkeiten</h1>
-            <p class="page-subtitle">Bleiben Sie auf dem Laufenden über Aktionen, Rückblicke und Termine des Gewerbevereins Heemsen.</p>
+            <h1 class="page-title">Veranstaltungen & Termine</h1>
+            <p class="page-subtitle">Verpassen Sie keine wichtigen Netzwerktreffen, Seminare oder Vereins-Aktionen.</p>
         </div>
     </section>
 
-    <!-- News Grid Section -->
+    <!-- Events List Section -->
     <section class="section bg-light">
         <div class="container">
-            <div class="news-grid-page">
+            <div class="events-page-list" id="dynamic-events-page">
                 
-                <!-- News werden hier dynamisch per JavaScript geladen -->
-                <div style="text-align:center; padding: 40px; width: 100%; color: var(--text-muted);">Lade Beiträge vom Server...</div>
+                <!-- Statische Dummy-Einträge für das Design (Werden später durchs Backend ersetzt) -->
+                
+                <!-- Event 1 -->
+                <article class="event-card-large">
+                    <div class="event-card-date">
+                        <span class="day">12</span>
+                        <span class="month">Jun</span>
+                        <span class="year">2026</span>
+                    </div>
+                    <div class="event-card-details">
+                        <h2 class="event-title">Jahreshauptversammlung 2026</h2>
+                        <div class="event-meta">
+                            <span><i class="fa-regular fa-clock"></i> 19:00 Uhr</span>
+                            <span><i class="fa-solid fa-location-dot"></i> Alte Schule Rohrsen</span>
+                        </div>
+                        <p class="event-desc">Wir laden alle Mitglieder herzlich zur diesjährigen Jahreshauptversammlung ein. Auf der Agenda stehen unter anderem der Rückblick auf das vergangene Jahr, die Kassenprüfung sowie die Planung kommender Aktivitäten.</p>
+                        <button class="btn btn-outline btn-sm">In Kalender eintragen</button>
+                    </div>
+                </article>
+
+                <!-- Event 2 -->
+                <article class="event-card-large">
+                    <div class="event-card-date">
+                        <span class="day">28</span>
+                        <span class="month">Aug</span>
+                        <span class="year">2026</span>
+                    </div>
+                    <div class="event-card-details">
+                        <h2 class="event-title">Vortrag: Digitalisierung im Mittelstand</h2>
+                        <div class="event-meta">
+                            <span><i class="fa-regular fa-clock"></i> 18:30 Uhr</span>
+                            <span><i class="fa-solid fa-location-dot"></i> Vereinsheim</span>
+                        </div>
+                        <p class="event-desc">Experte Dr. Müller zeigt praktische Beispiele auf, wie kleine und mittelständische Unternehmen ihre Prozesse effizient digitalisieren können. Im Anschluss gibt es eine offene Diskussionsrunde.</p>
+                        <button class="btn btn-outline btn-sm">In Kalender eintragen</button>
+                    </div>
+                </article>
+
+                <!-- Event 3 -->
+                <article class="event-card-large">
+                    <div class="event-card-date">
+                        <span class="day">15</span>
+                        <span class="month">Okt</span>
+                        <span class="year">2026</span>
+                    </div>
+                    <div class="event-card-details">
+                        <h2 class="event-title">Gemeinsame Fahrt zur Fachmesse</h2>
+                        <div class="event-meta">
+                            <span><i class="fa-regular fa-clock"></i> 08:00 Uhr</span>
+                            <span><i class="fa-solid fa-location-dot"></i> Treffpunkt: ZOB Heemsen</span>
+                        </div>
+                        <p class="event-desc">Wir organisieren einen gemeinsamen Bus zur großen Branchenmesse nach Hannover. Für Vereinsmitglieder übernimmt der Gewerbeverein die Fahrtkosten. Um verbindliche Anmeldung wird gebeten.</p>
+                        <button class="btn btn-outline btn-sm">In Kalender eintragen</button>
+                    </div>
+                </article>
 
             </div>
         </div>
     </section>
-
-    <!-- News Modal (Popup) -->
-    <div id="news-modal" class="modal-overlay">
-        <div class="modal-content">
-            <button class="modal-close" id="modal-close"><i class="fa-solid fa-xmark"></i></button>
-            
-            <!-- Slider -->
-            <div class="modal-slider-container" id="modal-slider-container">
-                <div class="modal-slider-track" id="modal-slider-track">
-                    <!-- Images will be injected here -->
-                </div>
-                <!-- Controls -->
-                <button class="slider-btn slider-prev" id="slider-prev"><i class="fa-solid fa-chevron-left"></i></button>
-                <button class="slider-btn slider-next" id="slider-next"><i class="fa-solid fa-chevron-right"></i></button>
-                <!-- Dots -->
-                <div class="slider-dots" id="slider-dots"></div>
-            </div>
-
-            <div class="modal-text-container">
-                <span class="news-date modal-date" id="modal-date"></span>
-                <h2 class="news-title modal-title" id="modal-title"></h2>
-                <div class="modal-body" id="modal-body">
-                    <!-- Text content will be injected here -->
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Footer -->
     <footer class="footer">
