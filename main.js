@@ -377,5 +377,41 @@ function bindModalEventsToNewCards() {
             modalOverlay.classList.add('active');
             document.body.style.overflow = 'hidden';
         });
+        });
     });
 }
+
+// ICS Download Helper Function
+window.downloadICS = function(title, dateStr, timeStr, location, description) {
+    // dateStr format: YYYY-MM-DD
+    // timeStr format: HH:MM
+    const startDate = dateStr.replace(/-/g, "") + "T" + timeStr.replace(":", "") + "00";
+    
+    // Add 2 hours for end time as a default estimate
+    let endHour = parseInt(timeStr.split(":")[0]) + 2;
+    if(endHour > 23) endHour = 23;
+    const endHourStr = endHour.toString().padStart(2, "0");
+    const endDate = dateStr.replace(/-/g, "") + "T" + endHourStr + timeStr.split(":")[1] + "00";
+
+    const icsContent = [
+        "BEGIN:VCALENDAR",
+        "VERSION:2.0",
+        "PRODID:-//Gewerbeverein Heemsen//DE",
+        "BEGIN:VEVENT",
+        "SUMMARY:" + title,
+        "DTSTART;TZID=Europe/Berlin:" + startDate,
+        "DTEND;TZID=Europe/Berlin:" + endDate,
+        "LOCATION:" + location,
+        "DESCRIPTION:" + description,
+        "END:VEVENT",
+        "END:VCALENDAR"
+    ].join("\r\n");
+
+    const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
+    const link = document.createElement("a");
+    link.href = window.URL.createObjectURL(blob);
+    link.setAttribute("download", title.replace(/[^a-z0-9]/gi, "_").toLowerCase() + ".ics");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+};
