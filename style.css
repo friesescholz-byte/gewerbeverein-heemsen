@@ -269,13 +269,6 @@ img {
     overflow: hidden;
 }
 
-.hero-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to right, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.3) 100%);
-    z-index: 0;
-}
-
 .hero-container {
     position: relative;
     z-index: 1;
@@ -283,8 +276,17 @@ img {
 }
 
 .hero-content {
+    position: relative;
+    z-index: 1;
     max-width: 700px;
     text-align: left;
+    padding: 50px 60px;
+    border-radius: 32px;
+    background: linear-gradient(135deg, rgba(193, 18, 31, 0.85) 0%, rgba(135, 12, 21, 0.6) 100%);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.4);
 }
 
 .hero-title {
@@ -311,7 +313,7 @@ img {
 /* Shape Divider CSS */
 .custom-shape-divider-bottom {
     position: absolute;
-    bottom: 0;
+    bottom: -1px;
     left: 0;
     width: 100%;
     overflow: hidden;
@@ -324,14 +326,6 @@ img {
     display: block;
     width: calc(100% + 1.3px);
     height: 120px;
-}
-
-.custom-shape-divider-bottom .shape-fill-bg {
-    fill: var(--bg-light); /* Matches the next section's background */
-}
-
-.custom-shape-divider-bottom .shape-fill-red {
-    fill: var(--primary); /* Logo red border effect */
 }
 
 /* --- GENERAL SECTIONS --- */
@@ -847,6 +841,10 @@ img {
 
     .hero-title {
         font-size: 2.5rem;
+    }
+    
+    .hero-content {
+        padding: 30px;
     }
     
     .hero-buttons {
