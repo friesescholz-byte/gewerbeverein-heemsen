@@ -259,62 +259,79 @@ img {
     min-height: 100vh;
     display: flex;
     align-items: center;
-    background-color: var(--bg-light);
-    /* For now a subtle gradient placeholder, later can be an image */
-    background: linear-gradient(135deg, rgba(248, 249, 250, 1) 0%, rgba(233, 236, 239, 1) 100%);
+    background-color: var(--secondary);
+    background-image: url('https://pub-b33108412309406a9a941ddc51e9a5b9.r2.dev/gewerbeverein%20heemsen/Gewerbeverein-Heemsen-Hero.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
     padding-top: 90px; /* Offset header */
+    padding-bottom: 150px; /* Space for wave */
     overflow: hidden;
 }
 
-/* Decorative background shapes */
-.hero::before {
-    content: '';
+.hero-overlay {
     position: absolute;
-    top: -10%;
-    right: -5%;
-    width: 600px;
-    height: 600px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(193, 18, 31, 0.05) 0%, rgba(193, 18, 31, 0) 70%);
+    inset: 0;
+    background: linear-gradient(to right, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.3) 100%);
     z-index: 0;
 }
 
 .hero-container {
     position: relative;
     z-index: 1;
+    width: 100%;
 }
 
 .hero-content {
-    max-width: 800px;
-    text-align: center;
-    margin: 0 auto;
+    max-width: 700px;
+    text-align: left;
 }
 
 .hero-title {
     font-size: clamp(2.5rem, 5vw, 4.5rem);
     font-weight: 800;
     margin-bottom: 24px;
-    color: var(--secondary);
+    color: var(--text-light);
     letter-spacing: -1px;
-}
-
-.hero-title span {
-    color: var(--primary);
 }
 
 .hero-subtitle {
     font-size: 1.25rem;
-    color: var(--text-main);
+    color: rgba(255, 255, 255, 0.9);
     margin-bottom: 40px;
-    max-width: 700px;
-    margin-left: auto;
-    margin-right: auto;
+    max-width: 600px;
 }
 
 .hero-buttons {
     display: flex;
     gap: 16px;
-    justify-content: center;
+    justify-content: flex-start;
+}
+
+/* Shape Divider CSS */
+.custom-shape-divider-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    z-index: 2;
+}
+
+.custom-shape-divider-bottom svg {
+    position: relative;
+    display: block;
+    width: calc(100% + 1.3px);
+    height: 120px;
+}
+
+.custom-shape-divider-bottom .shape-fill-bg {
+    fill: var(--bg-light); /* Matches the next section's background */
+}
+
+.custom-shape-divider-bottom .shape-fill-red {
+    fill: var(--primary); /* Logo red border effect */
 }
 
 /* --- GENERAL SECTIONS --- */
