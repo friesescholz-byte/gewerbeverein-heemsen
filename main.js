@@ -86,40 +86,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentSlideIndex = 0;
     let totalSlides = 0;
 
-    // Open Modal
-    const openButtons = document.querySelectorAll('.open-modal-btn');
-    openButtons.forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            const card = this.closest('.news-card-large') || this.closest('.news-card');
-            if (!card) return;
-
-            // Extract Data
-            const date = card.querySelector('.news-date').textContent;
-            const title = card.querySelector('.news-title').textContent;
-            const fullContentHtml = card.querySelector('.news-full-content').innerHTML;
-            
-            let images = [];
-            try {
-                const imagesData = card.querySelector('.news-images-data').getAttribute('data-images');
-                images = JSON.parse(imagesData);
-            } catch (e) {
-                console.error("Could not parse images data", e);
-            }
-
-            // Populate Modal Text
-            modalDate.textContent = date;
-            modalTitle.textContent = title;
-            modalBody.innerHTML = fullContentHtml;
-
-            // Populate Slider
-            setupSlider(images);
-
-            // Show Modal
-            modalOverlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        });
-    });
+    // Open Modal Logic is now handled dynamically after cards are rendered
+    window.setupSlider = setupSlider;
 
     // Close Modal
     const closeModal = () => {
@@ -208,83 +176,196 @@ document.addEventListener('DOMContentLoaded', () => {
     sliderNextBtn.addEventListener('click', () => goToSlide(currentSlideIndex + 1));
 });
 
-// --- Pagination Logic ---
-document.addEventListener('DOMContentLoaded', () => {
-    const newsGrid = document.querySelector('.news-grid-page');
-    if (!newsGrid) return;
+// --- Dynamic News Loading & Pagination ---
+document.addEventListener('DOMContentLoaded', async () => {
+    const homeContainer = document.getElementById('dynamic-news-home');
+    const pageContainer = document.querySelector('.news-grid-page');
+    
+    if (!homeContainer && !pageContainer) return;
 
-    const cards = Array.from(newsGrid.querySelectorAll('.news-card-large'));
-    const itemsPerPage = 12;
-    let currentPage = 1;
-    const totalPages = Math.ceil(cards.length / itemsPerPage);
+    try {
+        const res = await fetch('https://gewerbeverin-heemsen-backend.friese-scholz.workers.dev/api/news');
+        const posts = await res.json();
 
-    // Create pagination container if it doesn't exist
-    let paginationContainer = document.getElementById('pagination');
-    if (!paginationContainer && totalPages > 1) {
-        paginationContainer = document.createElement('div');
-        paginationContainer.id = 'pagination';
-        paginationContainer.className = 'pagination-container';
-        newsGrid.parentNode.appendChild(paginationContainer);
-    }
-
-    function renderPage(page, scrollToTop = true) {
-        if (page < 1) page = 1;
-        if (page > totalPages) page = totalPages;
-        currentPage = page;
-
-        // Hide all
-        cards.forEach(card => card.style.display = 'none');
-
-        // Show items for current page
-        const start = (page - 1) * itemsPerPage;
-        const end = start + itemsPerPage;
-        for (let i = start; i < end && i < cards.length; i++) {
-            cards[i].style.display = 'flex';
+        // --- Render Homepage (Max 2) ---
+        if (homeContainer) {
+            homeContainer.innerHTML = '';
+            if (posts.length === 0) {
+                homeContainer.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:20px;">Keine Neuigkeiten verfügbar.</p>';
+            }
+            const recentPosts = posts.slice(0, 2);
+            recentPosts.forEach(post => {
+                const imgUrl = (post.images && post.images.length > 0) ? post.images[0] : 'https://pub-b33108412309406a9a941ddc51e9a5b9.r2.dev/gewerbeverein%20heemsen/Gewerbeverein-Heemsen-Logo.png';
+                const card = document.createElement('article');
+                card.className = 'news-card';
+                card.innerHTML = `
+                    <div class="news-image-placeholder" style="background-image: url('${imgUrl}'); background-size: cover; background-position: center;"></div>
+                    <div class="news-content">
+                        <span class="news-date">${post.date}</span>
+                        <h4 class="news-title">${post.title}</h4>
+                        <p class="news-excerpt">${post.excerpt}</p>
+                        <a href="aktuelles.html" class="text-link">Weiterlesen <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                `;
+                homeContainer.appendChild(card);
+            });
         }
 
-        renderPaginationControls();
-        
-        // Scroll to top of grid when changing page
-        if (scrollToTop) {
-            const yOffset = -100; 
-            const y = newsGrid.getBoundingClientRect().top + window.pageYOffset + yOffset;
-            window.scrollTo({top: y, behavior: 'smooth'});
+        // --- Render Subpage (Pagination & Modal) ---
+        if (pageContainer) {
+            pageContainer.innerHTML = '';
+            if (posts.length === 0) {
+                pageContainer.innerHTML = '<div style="text-align:center; padding: 40px; width: 100%; color: var(--text-muted);">Keine Beiträge vorhanden.</div>';
+                return;
+            }
+
+            const itemsPerPage = 12;
+            let currentPage = 1;
+            const totalPages = Math.ceil(posts.length / itemsPerPage);
+            
+            // Create pagination container if > 1 page
+            let paginationContainer = document.getElementById('pagination');
+            if (!paginationContainer && totalPages > 1) {
+                paginationContainer = document.createElement('div');
+                paginationContainer.id = 'pagination';
+                paginationContainer.className = 'pagination-container';
+                pageContainer.parentNode.appendChild(paginationContainer);
+            }
+
+            function renderPage(page, scrollToTop = true) {
+                if (page < 1) page = 1;
+                if (page > totalPages) page = totalPages;
+                currentPage = page;
+
+                pageContainer.innerHTML = '';
+                const start = (page - 1) * itemsPerPage;
+                const end = start + itemsPerPage;
+                const pagePosts = posts.slice(start, end);
+
+                pagePosts.forEach(post => {
+                    const imgUrl = (post.images && post.images.length > 0) ? post.images[0] : 'https://pub-b33108412309406a9a941ddc51e9a5b9.r2.dev/gewerbeverein%20heemsen/Gewerbeverein-Heemsen-Logo.png';
+                    
+                    const card = document.createElement('article');
+                    card.className = 'news-card-large';
+                    
+                    // Create hidden data safely
+                    const hiddenData = document.createElement('div');
+                    hiddenData.style.display = 'none';
+                    
+                    // Clean content mapping
+                    let safeImages = [];
+                    if (Array.isArray(post.images)) {
+                        safeImages = post.images;
+                    }
+
+                    hiddenData.innerHTML = `
+                        <div class="news-full-content">${post.content}</div>
+                        <div class="news-images-data" data-images='${JSON.stringify(safeImages).replace(/'/g, "&#39;")}'></div>
+                    `;
+
+                    card.innerHTML = `
+                        <div class="news-card-img" style="background-image: url('${imgUrl}');"></div>
+                        <div class="news-card-content">
+                            <span class="news-date">${post.date}</span>
+                            <h2 class="news-title">${post.title}</h2>
+                            <p class="news-excerpt">${post.excerpt}</p>
+                            <button class="btn btn-primary open-modal-btn">Vollständigen Beitrag lesen</button>
+                        </div>
+                    `;
+                    card.appendChild(hiddenData);
+                    pageContainer.appendChild(card);
+                });
+
+                renderPaginationControls();
+                bindModalEventsToNewCards();
+
+                if (scrollToTop) {
+                    const yOffset = -100; 
+                    const y = pageContainer.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                    window.scrollTo({top: y, behavior: 'smooth'});
+                }
+            }
+
+            function renderPaginationControls() {
+                if (!paginationContainer || totalPages <= 1) return;
+                paginationContainer.innerHTML = '';
+
+                // Prev
+                const prevBtn = document.createElement('button');
+                prevBtn.className = 'page-btn';
+                prevBtn.innerHTML = '<i class="fa-solid fa-chevron-left"></i>';
+                prevBtn.disabled = currentPage === 1;
+                prevBtn.addEventListener('click', (e) => { e.preventDefault(); renderPage(currentPage - 1); });
+                paginationContainer.appendChild(prevBtn);
+
+                // Pages
+                for (let i = 1; i <= totalPages; i++) {
+                    const pageBtn = document.createElement('button');
+                    pageBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+                    pageBtn.textContent = i;
+                    pageBtn.addEventListener('click', (e) => { e.preventDefault(); renderPage(i); });
+                    paginationContainer.appendChild(pageBtn);
+                }
+
+                // Next
+                const nextBtn = document.createElement('button');
+                nextBtn.className = 'page-btn';
+                nextBtn.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
+                nextBtn.disabled = currentPage === totalPages;
+                nextBtn.addEventListener('click', (e) => { e.preventDefault(); renderPage(currentPage + 1); });
+                paginationContainer.appendChild(nextBtn);
+            }
+
+            renderPage(1, false);
         }
-    }
 
-    function renderPaginationControls() {
-        if (!paginationContainer || totalPages <= 1) return;
-        paginationContainer.innerHTML = '';
-
-        // Prev button
-        const prevBtn = document.createElement('button');
-        prevBtn.className = 'page-btn';
-        prevBtn.innerHTML = '<i class="fa-solid fa-chevron-left"></i>';
-        prevBtn.disabled = currentPage === 1;
-        prevBtn.addEventListener('click', (e) => { e.preventDefault(); renderPage(currentPage - 1); });
-        paginationContainer.appendChild(prevBtn);
-
-        // Page buttons
-        for (let i = 1; i <= totalPages; i++) {
-            const pageBtn = document.createElement('button');
-            pageBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
-            pageBtn.textContent = i;
-            pageBtn.addEventListener('click', (e) => { e.preventDefault(); renderPage(i); });
-            paginationContainer.appendChild(pageBtn);
-        }
-
-        // Next button
-        const nextBtn = document.createElement('button');
-        nextBtn.className = 'page-btn';
-        nextBtn.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
-        nextBtn.disabled = currentPage === totalPages;
-        nextBtn.addEventListener('click', (e) => { e.preventDefault(); renderPage(currentPage + 1); });
-        paginationContainer.appendChild(nextBtn);
-    }
-
-    // Init
-    if (cards.length > 0) {
-        // Initial render without scrolling
-        renderPage(1, false);
+    } catch (e) {
+        console.error("Error loading news:", e);
+        if (homeContainer) homeContainer.innerHTML = '<p style="text-align:center;">Fehler beim Laden der News.</p>';
+        if (pageContainer) pageContainer.innerHTML = '<p style="text-align:center;">Fehler beim Laden der News.</p>';
     }
 });
+
+function bindModalEventsToNewCards() {
+    const openButtons = document.querySelectorAll('.open-modal-btn');
+    const modalOverlay = document.getElementById('news-modal');
+    if (!modalOverlay) return;
+
+    const modalDate = document.getElementById('modal-date');
+    const modalTitle = document.getElementById('modal-title');
+    const modalBody = document.getElementById('modal-body');
+
+    openButtons.forEach(btn => {
+        if (btn.classList.contains('bound')) return;
+        btn.classList.add('bound');
+        
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const card = this.closest('.news-card-large');
+            if (!card) return;
+
+            const date = card.querySelector('.news-date').textContent;
+            const title = card.querySelector('.news-title').textContent;
+            const fullContentHtml = card.querySelector('.news-full-content').innerHTML;
+            
+            let images = [];
+            try {
+                const imagesData = card.querySelector('.news-images-data').getAttribute('data-images');
+                images = JSON.parse(imagesData);
+            } catch (e) {
+                console.error("Could not parse images data", e);
+            }
+
+            modalDate.textContent = date;
+            modalTitle.textContent = title;
+            modalBody.innerHTML = fullContentHtml;
+
+            if (typeof window.setupSlider === 'function') {
+                window.setupSlider(images);
+            }
+
+            modalOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+    });
+}
