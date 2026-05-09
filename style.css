@@ -351,7 +351,7 @@ img {
     background-color: var(--bg-dark);
 }
 
-.text-white {
+.text-white, .text-white h1, .text-white h2, .text-white h3, .text-white h4, .text-white h5, .text-white h6, .text-white .section-title {
     color: var(--text-light);
 }
 
@@ -638,22 +638,13 @@ img {
     letter-spacing: 1px;
 }
 
-.about-image .placeholder-img-box {
-    background-color: rgba(255,255,255,0.05);
-    border: 2px dashed rgba(255,255,255,0.2);
+.about-image img {
     border-radius: var(--radius-xl);
-    height: 500px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: rgba(255,255,255,0.5);
-    font-size: 1.2rem;
-    gap: 16px;
-}
-
-.about-image .placeholder-img-box i {
-    font-size: 4rem;
+    box-shadow: var(--shadow-lg);
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border: 1px solid rgba(255,255,255,0.1);
 }
 
 /* --- GAFA TEASER --- */
