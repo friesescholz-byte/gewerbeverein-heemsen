@@ -269,6 +269,22 @@ img {
     overflow: hidden;
 }
 
+/* Dynamische, diagonale Designer-Form über das gesamte Bild */
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 65%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(193, 18, 31, 0.95) 0%, rgba(135, 12, 21, 0.5) 100%);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    clip-path: polygon(0 0, 100% 0, 75% 100%, 0 100%);
+    z-index: 0;
+    border-right: 2px solid rgba(255, 255, 255, 0.2);
+}
+
 .hero-container {
     position: relative;
     z-index: 1;
@@ -278,15 +294,9 @@ img {
 .hero-content {
     position: relative;
     z-index: 1;
-    max-width: 700px;
+    max-width: 650px;
     text-align: left;
-    padding: 50px 60px;
-    border-radius: 32px;
-    background: linear-gradient(135deg, rgba(193, 18, 31, 0.85) 0%, rgba(135, 12, 21, 0.6) 100%);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 30px 60px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.4);
+    padding: 20px 0;
 }
 
 .hero-title {
@@ -770,6 +780,11 @@ img {
 
 /* --- RESPONSIVE DESIGN --- */
 @media (max-width: 992px) {
+    .hero::before {
+        width: 100%;
+        clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+    }
+
     .hero-title {
         font-size: 3rem;
     }
@@ -792,6 +807,10 @@ img {
 }
 
 @media (max-width: 768px) {
+    .hero::before {
+        clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
+    }
+
     .nav-menu {
         position: fixed;
         top: 90px;
@@ -844,7 +863,7 @@ img {
     }
     
     .hero-content {
-        padding: 30px;
+        padding: 0;
     }
     
     .hero-buttons {
