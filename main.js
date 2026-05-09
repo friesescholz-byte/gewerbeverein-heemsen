@@ -380,6 +380,108 @@ function bindModalEventsToNewCards() {
     });
 }
 
+// --- Dynamic Events Loading ---
+document.addEventListener('DOMContentLoaded', async () => {
+    const homeEventsContainer = document.getElementById('dynamic-home-events');
+    const pageEventsContainer = document.getElementById('dynamic-events-page');
+    
+    if (!homeEventsContainer && !pageEventsContainer) return;
+
+    try {
+        const res = await fetch('https://gewerbeverin-heemsen-backend.friese-scholz.workers.dev/api/events');
+        let events = await res.json();
+
+        // Datum filtern und sortieren (nur zukünftige, nächste zuerst)
+        const today = new Date();
+        today.setHours(0,0,0,0);
+        
+        // Alle zukünftigen Termine aufsteigend sortieren
+        let upcomingEvents = events
+            .filter(e => new Date(e.date) >= today)
+            .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+        // Format Date Helpers
+        const monthNames = ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"];
+
+        // --- Render Homepage (Max 3) ---
+        if (homeEventsContainer) {
+            homeEventsContainer.innerHTML = '';
+            if (upcomingEvents.length === 0) {
+                homeEventsContainer.innerHTML = '<p style="color:var(--text-muted);text-align:center;">Derzeit keine Termine geplant.</p>';
+            }
+            const nextThree = upcomingEvents.slice(0, 3);
+            nextThree.forEach(event => {
+                const eDate = new Date(event.date);
+                const day = eDate.getDate().toString().padStart(2, '0');
+                const month = monthNames[eDate.getMonth()];
+                
+                const item = document.createElement('div');
+                item.className = 'event-item';
+                item.innerHTML = `
+                    <div class="event-date-box">
+                        <span class="event-day">${day}</span>
+                        <span class="event-month">${month}</span>
+                    </div>
+                    <div class="event-details">
+                        <h4 class="event-title">${event.title}</h4>
+                        <p class="event-meta">
+                            <span><i class="fa-regular fa-clock"></i> ${event.time} Uhr</span>
+                        </p>
+                    </div>
+                `;
+                homeEventsContainer.appendChild(item);
+            });
+        }
+
+        // --- Render Subpage (All Upcoming) ---
+        if (pageEventsContainer) {
+            pageEventsContainer.innerHTML = '';
+            if (upcomingEvents.length === 0) {
+                pageEventsContainer.innerHTML = '<div style="grid-column: 1 / -1; text-align:center; padding: 40px; color: var(--text-muted);">Derzeit keine anstehenden Termine.</div>';
+                return;
+            }
+
+            upcomingEvents.forEach(event => {
+                const eDate = new Date(event.date);
+                const day = eDate.getDate().toString().padStart(2, '0');
+                const month = monthNames[eDate.getMonth()];
+
+                const safeTitle = event.title.replace(/'/g, "\\'");
+                const safeDate = event.date;
+                const safeTime = event.time;
+                const safeLocation = event.location.replace(/'/g, "\\'");
+                const safeDesc = event.description.replace(/'/g, "\\'").replace(/\n/g, " ");
+
+                const article = document.createElement('article');
+                article.className = 'event-tile';
+                article.innerHTML = `
+                    <div class="event-tile-header">
+                        <div class="event-tile-date">
+                            <span class="day">${day}</span>
+                            <span class="month">${month}</span>
+                        </div>
+                        <h2 class="event-tile-title">${event.title}</h2>
+                    </div>
+                    <div class="event-tile-body">
+                        <div class="event-tile-meta">
+                            <span><i class="fa-regular fa-clock"></i> ${event.time} Uhr</span>
+                            <span><i class="fa-solid fa-location-dot"></i> ${event.location}</span>
+                        </div>
+                        <p class="event-tile-desc">${event.description.replace(/\\n/g, '<br>')}</p>
+                        <div class="event-tile-footer">
+                            <button class="btn btn-outline btn-sm" onclick="downloadICS('${safeTitle}', '${safeDate}', '${safeTime}', '${safeLocation}', '${safeDesc}')">In Kalender eintragen</button>
+                        </div>
+                    </div>
+                `;
+                pageEventsContainer.appendChild(article);
+            });
+        }
+
+    } catch (e) {
+        console.error("Error fetching events:", e);
+    }
+});
+
 // ICS Download Helper Function
 window.downloadICS = function(title, dateStr, timeStr, location, description) {
     // dateStr format: YYYY-MM-DD
