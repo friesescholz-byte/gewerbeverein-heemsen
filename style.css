@@ -899,7 +899,7 @@ img {
 }
 
 .news-card-large {
-    background: var(--bg-main);
+    background: var(--bg-color);
     border-radius: var(--radius-lg);
     overflow: hidden;
     box-shadow: var(--shadow-md);
@@ -978,7 +978,7 @@ img {
 }
 
 .modal-content {
-    background: var(--bg-main);
+    background: var(--secondary);
     width: 100%;
     max-width: 900px;
     max-height: 90vh;
@@ -988,6 +988,7 @@ img {
     transform: scale(0.95);
     transition: transform 0.3s ease;
     box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+    color: var(--text-light);
 }
 
 .modal-overlay.active .modal-content {
@@ -1106,7 +1107,7 @@ img {
 
 .modal-title {
     font-size: 2.5rem;
-    color: var(--text-dark);
+    color: var(--text-light);
     margin-bottom: 24px;
     line-height: 1.2;
 }
@@ -1114,7 +1115,7 @@ img {
 .modal-body p {
     font-size: 1.1rem;
     margin-bottom: 20px;
-    color: var(--text-main);
+    color: rgba(255, 255, 255, 0.9);
     line-height: 1.8;
 }
 
