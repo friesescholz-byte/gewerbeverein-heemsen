@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aktuelles - Gewerbeverein Heemsen</title>
+    <meta name="description" content="Neuigkeiten, Aktionen und Rückblicke des Gewerbevereins Heemsen.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;500;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome (Icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Header & Navigation -->
+    <header class="header" id="header">
+        <div class="container header-container">
+            <a href="index.html" class="logo">
+                <img src="https://pub-b33108412309406a9a941ddc51e9a5b9.r2.dev/gewerbeverein%20heemsen/Gewerbeverein-Heemsen-Logo.png" alt="Gewerbeverein Heemsen Logo">
+            </a>
+            
+            <nav class="nav-menu" id="nav-menu">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="index.html" class="nav-link">Startseite</a></li>
+                    <li class="nav-item"><a href="aktuelles.html" class="nav-link active">Aktuelles</a></li>
+                    <li class="nav-item"><a href="index.html#termine" class="nav-link">Termine</a></li>
+                    <li class="nav-item"><a href="index.html#mitglieder" class="nav-link">Mitglieder</a></li>
+                    <li class="nav-item"><a href="index.html#ueber-uns" class="nav-link">Über uns</a></li>
+                    <li class="nav-item"><a href="index.html#gafa" class="nav-link">GAFA</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <a href="index.html#mitglied-werden" class="btn btn-outline">Mitglied werden</a>
+                </div>
+            </nav>
+
+            <button class="hamburger" id="hamburger" aria-label="Menü öffnen">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Page Hero -->
+    <section class="page-hero">
+        <div class="container">
+            <h1 class="page-title">Aktuelles & Neuigkeiten</h1>
+            <p class="page-subtitle">Bleiben Sie auf dem Laufenden über Aktionen, Rückblicke und Termine des Gewerbevereins Heemsen.</p>
+        </div>
+    </section>
+
+    <!-- News Grid Section -->
+    <section class="section bg-light">
+        <div class="container">
+            <div class="news-grid-page">
+                
+                <!-- News Card 1 -->
+                <article class="news-card-large">
+                    <div class="news-card-img" style="background-image: url('https://pub-b33108412309406a9a941ddc51e9a5b9.r2.dev/gewerbeverein%20heemsen/aktuelles/rochlitz_auf_planwagen.jpg');"></div>
+                    <div class="news-card-content">
+                        <span class="news-date">07.05.2026</span>
+                        <h2 class="news-title">Als Niedersachse in Sachsen</h2>
+                        <p class="news-excerpt">Im April war eine Delegation des Gewerbevereins Heemsen wieder einmal zu Gast bei dem befreundeten Gewerbeverein im sächsischen Rochlitz...</p>
+                        <button class="btn btn-primary open-modal-btn">Vollständigen Beitrag lesen</button>
+                    </div>
+                    
+                    <!-- Hidden Data for Modal -->
+                    <div class="news-full-content" style="display: none;">
+                        <p>Im April war eine Delegation des Gewerbevereins Heemsen wieder einmal zu Gast bei dem befreundeten Gewerbeverein im sächsischen Rochlitz. Nach dem Eintreffen an der Bäckerei und Konditorei von Karsten Stölzel, dem Vorsitzenden des Gewerbevereins Rochlitz (links), wurde hier zunächst ausgiebig gefrühstückt.</p>
+                        <p>Nach dem Frühstück wurde Quartier bezogen im Nachbarort Seelitz, von hier ging es mit einer Kutsche zu einer Betriebsbesichtigung eines Fahrzeugbaubetriebes. Die Führung wurde vom Inhaber der Firma sehr Informativ rüber gebracht.</p>
+                        <p>Auf der Rückfahrt zum Reiterhof wurden viele Gewerkeübergreifende Gespräche geführt. Diese wurden bei einem gemeinsamen Abendessen vertieft.</p>
+                        <p>Im Osten wie im Westen Deutschlands habe alle dieselben Probleme mit Mitarbeiterfindung und Fachkräftemangel sowie der Bürokratie. Tolle Gespräche und Eindrücke beendeten den ersten Tag.</p>
+                        <p>Nach dem gemeinsamen Frühstück am Sonntag ging es in die frisch restaurierte Bibliothek Rochlitz. Die Führung übernahm der Bürgermeister der Stadt persönlich. Zu sehen waren Teile des Dresdener Fürstenzugs und eine Ausstellung der Kostüme.</p>
+                        <p>Von dort ging es dann wieder nach Niedersachen in die Heimat. Ein Gegenbesuch soll zur GAFA im Mai 2027 erfolgen.</p>
+                    </div>
+                    <div class="news-images-data" style="display: none;" data-images='[
+                        "https://pub-b33108412309406a9a941ddc51e9a5b9.r2.dev/gewerbeverein%20heemsen/aktuelles/rochlitz_auf_planwagen.jpg",
+                        "https://pub-b33108412309406a9a941ddc51e9a5b9.r2.dev/gewerbeverein%20heemsen/aktuelles/rochlitz_in_werkstatt.jpg",
+                        "https://pub-b33108412309406a9a941ddc51e9a5b9.r2.dev/gewerbeverein%20heemsen/aktuelles/rochlitz_lustiger_abend.jpg",
+                        "https://pub-b33108412309406a9a941ddc51e9a5b9.r2.dev/gewerbeverein%20heemsen/aktuelles/rochlitz_mit_joern.jpg"
+                    ]'></div>
+                </article>
+
+                <!-- News Card 2 -->
+                <article class="news-card-large">
+                    <div class="news-card-img" style="background-image: url('https://pub-b33108412309406a9a941ddc51e9a5b9.r2.dev/gewerbeverein%20heemsen/aktuelles/ki_gewerbeverein.jpg');"></div>
+                    <div class="news-card-content">
+                        <span class="news-date">13.03.2026</span>
+                        <h2 class="news-title">KI-Vortrag mit Jörn Wendt</h2>
+                        <p class="news-excerpt">Über Chancen und Gefahren von Künstlicher Intelligenz (KI) berichtet der Finanzexperte Jörn Wendt am Montag, 16. März, um 19 Uhr auf Einladung des Gewerbevereins Heemsen...</p>
+                        <button class="btn btn-primary open-modal-btn">Vollständigen Beitrag lesen</button>
+                    </div>
+                    
+                    <!-- Hidden Data for Modal -->
+                    <div class="news-full-content" style="display: none;">
+                        <p>Über Chancen und Gefahren von Künstlicher Intelligenz (KI) berichtet der Finanzexperte Jörn Wendt am Montag, 16. März, um 19 Uhr auf Einladung des Gewerbevereins Heemsen in der Alten Schule in Rohrsen.</p>
+                        <p>Willkommen sind alle, die wissen möchten, wie sie KI in ihren Alltag integrieren, sich gleichzeitig aber auch vor ihr schützen können.</p>
+                        <p>An den Vortrag schließt sich ein geselliges Beisammensein bei Bier und Bratwurst an. Eine Anmeldung ist nicht erforderlich.</p>
+                    </div>
+                    <div class="news-images-data" style="display: none;" data-images='[
+                        "https://pub-b33108412309406a9a941ddc51e9a5b9.r2.dev/gewerbeverein%20heemsen/aktuelles/ki_gewerbeverein.jpg"
+                    ]'></div>
+                </article>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- News Modal (Popup) -->
+    <div id="news-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close" id="modal-close"><i class="fa-solid fa-xmark"></i></button>
+            
+            <!-- Slider -->
+            <div class="modal-slider-container" id="modal-slider-container">
+                <div class="modal-slider-track" id="modal-slider-track">
+                    <!-- Images will be injected here -->
+                </div>
+                <!-- Controls -->
+                <button class="slider-btn slider-prev" id="slider-prev"><i class="fa-solid fa-chevron-left"></i></button>
+                <button class="slider-btn slider-next" id="slider-next"><i class="fa-solid fa-chevron-right"></i></button>
+                <!-- Dots -->
+                <div class="slider-dots" id="slider-dots"></div>
+            </div>
+
+            <div class="modal-text-container">
+                <span class="news-date modal-date" id="modal-date"></span>
+                <h2 class="news-title modal-title" id="modal-title"></h2>
+                <div class="modal-body" id="modal-body">
+                    <!-- Text content will be injected here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-container">
+            <div class="footer-col">
+                <img src="https://pub-b33108412309406a9a941ddc51e9a5b9.r2.dev/gewerbeverein%20heemsen/Gewerbeverein-Heemsen-Logo.png" alt="Gewerbeverein Heemsen Logo" class="footer-logo">
+                <p class="footer-text">Gemeinsam stark für Handel, Handwerk und Dienstleistung in Heemsen und der Region.</p>
+            </div>
+            <div class="footer-col">
+                <h4 class="footer-title">Kontakt</h4>
+                <p class="footer-text">Gewerbeverein Heemsen e.V.</p>
+                <p class="footer-text"><a href="mailto:info@gewerbeverein-heemsen.de" class="footer-link">info@gewerbeverein-heemsen.de</a></p>
+            </div>
+            <div class="footer-col">
+                <h4 class="footer-title">Rechtliches</h4>
+                <ul class="footer-links">
+                    <li><a href="#" class="footer-link">Impressum</a></li>
+                    <li><a href="#" class="footer-link">Datenschutz</a></li>
+                    <li><a href="#" class="footer-link">Satzung</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Gewerbeverein Heemsen e.V. – Alle Rechte vorbehalten.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="main.js"></script>
+</body>
+</html>
