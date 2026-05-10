@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mitglied werden - Gewerbeverein Heemsen</title>
+    <meta name="description" content="Werden Sie Teil unseres starken Netzwerks in Heemsen. Jetzt Mitgliedsantrag herunterladen und einreichen.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;500;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome (Icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+            margin-bottom: 60px;
+        }
+        .step-card {
+            background: white;
+            border-radius: 16px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.03);
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .step-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+        }
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            margin: 0 auto 25px;
+            box-shadow: 0 5px 15px rgba(228, 0, 51, 0.3);
+        }
+        .step-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.3rem;
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+        }
+        .step-desc {
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+        
+        .upload-form-container {
+            background: white;
+            border-radius: 16px;
+            padding: 50px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.03);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .form-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .form-header h2 {
+            font-family: 'Outfit', sans-serif;
+            color: var(--secondary-color);
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        .form-header p {
+            color: var(--text-muted);
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        @media (max-width: 768px) {
+            .form-grid { grid-template-columns: 1fr; }
+            .upload-form-container { padding: 30px 20px; }
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--secondary-color);
+        }
+        .form-control {
+            width: 100%;
+            padding: 14px 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background-color: #fafafa;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(228, 0, 51, 0.1);
+            background-color: white;
+        }
+        
+        .file-upload-wrapper {
+            position: relative;
+            width: 100%;
+            height: 150px;
+            border: 2px dashed #d0d0d0;
+            border-radius: 8px;
+            background-color: #fafafa;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        .file-upload-wrapper:hover, .file-upload-wrapper.dragover {
+            border-color: var(--primary-color);
+            background-color: rgba(228, 0, 51, 0.02);
+        }
+        .file-upload-input {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0;
+            cursor: pointer;
+            z-index: 10;
+        }
+        .file-upload-content {
+            text-align: center;
+            pointer-events: none;
+        }
+        .file-upload-content i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            opacity: 0.8;
+        }
+        .file-upload-content p {
+            margin: 0;
+            font-weight: 500;
+            color: var(--secondary-color);
+        }
+        .file-upload-content span {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        .file-name-display {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: var(--primary-color);
+            font-weight: 600;
+            text-align: center;
+            display: none;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.1rem;
+            margin-top: 10px;
+        }
+        
+        .success-message {
+            display: none;
+            background-color: rgba(40, 167, 69, 0.1);
+            color: #28a745;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 20px;
+            border: 1px solid rgba(40, 167, 69, 0.2);
+        }
+        .success-message i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        .success-message h4 {
+            margin-bottom: 5px;
+            font-family: 'Outfit', sans-serif;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header & Navigation -->
+    <header class="header" id="header">
+        <div class="container header-container">
+            <a href="index.html" class="logo">
+                <img src="https://pub-b33108412309406a9a941ddc51e9a5b9.r2.dev/gewerbeverein%20heemsen/Gewerbeverein-Heemsen-Logo.png" alt="Gewerbeverein Heemsen Logo">
+            </a>
+            
+            <nav class="nav-menu" id="nav-menu">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="index.html" class="nav-link">Startseite</a></li>
+                    <li class="nav-item"><a href="aktuelles.html" class="nav-link">Aktuelles</a></li>
+                    <li class="nav-item"><a href="termine.html" class="nav-link">Termine</a></li>
+                    <li class="nav-item"><a href="mitglieder.html" class="nav-link">Mitglieder</a></li>
+                    <li class="nav-item"><a href="index.html#ueber-uns" class="nav-link">Über uns</a></li>
+                    <li class="nav-item"><a href="index.html#gafa" class="nav-link">GAFA</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <a href="mitglied-werden.html" class="btn btn-outline">Mitglied werden</a>
+                </div>
+            </nav>
+
+            <button class="hamburger" id="hamburger" aria-label="Menü öffnen">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Page Hero -->
+    <section class="page-hero" style="padding: 120px 0 60px;">
+        <div class="container">
+            <h1 class="page-title">Werden Sie Mitglied</h1>
+            <p style="text-align: center; color: var(--text-muted); max-width: 600px; margin: 0 auto; font-size: 1.1rem; line-height: 1.6;">
+                Gemeinsam stark für Heemsen und die Region. Schließen Sie sich unserem aktiven Netzwerk aus Handel, Handwerk und Dienstleistung an.
+            </p>
+        </div>
+    </section>
+
+    <!-- Steps Section -->
+    <section class="section bg-light" style="padding: 40px 0 60px;">
+        <div class="container">
+            <div class="steps-container">
+                
+                <!-- Step 1 -->
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3 class="step-title">Herunterladen</h3>
+                    <p class="step-desc">Laden Sie sich bequem unseren offiziellen Mitgliedsantrag als PDF-Dokument herunter.</p>
+                    <a href="#" class="btn btn-outline" style="width: 100%;"><i class="fa-solid fa-download" style="margin-right: 8px;"></i> Antrag (PDF)</a>
+                </div>
+                
+                <!-- Step 2 -->
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3 class="step-title">Ausfüllen</h3>
+                    <p class="step-desc">Füllen Sie das Dokument ganz einfach digital aus oder drucken Sie es, um es handschriftlich zu ergänzen.</p>
+                    <div style="height: 48px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); opacity: 0.5;">
+                        <i class="fa-solid fa-pen-to-square" style="font-size: 1.5rem;"></i>
+                    </div>
+                </div>
+                
+                <!-- Step 3 -->
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3 class="step-title">Einreichen</h3>
+                    <p class="step-desc">Laden Sie den ausgefüllten Antrag direkt hier über das untenstehende Formular hoch und senden Sie ihn an uns.</p>
+                    <a href="#upload-section" class="btn btn-primary" style="width: 100%;">Zum Upload <i class="fa-solid fa-arrow-down" style="margin-left: 8px;"></i></a>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+
+    <!-- Form Section -->
+    <section id="upload-section" class="section" style="padding: 60px 0 100px;">
+        <div class="container">
+            <div class="upload-form-container">
+                <div class="form-header">
+                    <h2>Antrag online einreichen</h2>
+                    <p>Hinterlassen Sie uns Ihre Kontaktdaten und hängen Sie den ausgefüllten Antrag an.</p>
+                </div>
+                
+                <form id="membership-form" class="form-grid" onsubmit="handleMembershipSubmit(event)">
+                    
+                    <div class="form-group">
+                        <label for="name" class="form-label">Vor- und Nachname *</label>
+                        <input type="text" id="name" name="name" class="form-control" placeholder="Max Mustermann" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="company" class="form-label">Unternehmen (Optional)</label>
+                        <input type="text" id="company" name="company" class="form-control" placeholder="Musterfirma GmbH">
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <label for="email" class="form-label">E-Mail Adresse *</label>
+                        <input type="email" id="email" name="email" class="form-control" placeholder="max@beispiel.de" required>
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <label class="form-label">Mitgliedsantrag hochladen *</label>
+                        <div class="file-upload-wrapper" id="drop-zone">
+                            <input type="file" id="application-file" name="application-file" class="file-upload-input" accept=".pdf,image/png,image/jpeg" required onchange="handleFileSelect(event)">
+                            <div class="file-upload-content" id="upload-content">
+                                <i class="fa-solid fa-cloud-arrow-up"></i>
+                                <p>Datei hier ablegen oder klicken</p>
+                                <span>PDF, JPG oder PNG (max. 10MB)</span>
+                            </div>
+                        </div>
+                        <div class="file-name-display" id="file-name-display">
+                            <i class="fa-solid fa-file-pdf"></i> <span id="file-name-text">antrag.pdf</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <label class="form-label" style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer; font-weight: normal;">
+                            <input type="checkbox" required style="margin-top: 5px; transform: scale(1.2);">
+                            <span style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.5;">Ich habe die <a href="datenschutz.html" style="color: var(--primary-color);">Datenschutzerklärung</a> zur Kenntnis genommen und stimme zu, dass meine Angaben zur Bearbeitung des Antrags elektronisch erhoben und gespeichert werden.</span>
+                        </label>
+                    </div>
+                    
+                    <div class="form-group full-width" style="margin-top: 10px;">
+                        <button type="submit" class="btn btn-primary submit-btn" id="submit-btn">
+                            Antrag zahlungspflichtig absenden <i class="fa-regular fa-paper-plane" style="margin-left: 8px;"></i>
+                        </button>
+                    </div>
+                </form>
+
+                <div class="success-message" id="success-message">
+                    <i class="fa-solid fa-circle-check"></i>
+                    <h4>Vielen Dank für Ihren Antrag!</h4>
+                    <p>Wir haben Ihre Unterlagen erfolgreich erhalten. Der Vorstand wird sich in Kürze mit Ihnen in Verbindung setzen.</p>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <img src="https://pub-b33108412309406a9a941ddc51e9a5b9.r2.dev/gewerbeverein%20heemsen/Gewerbeverein-Heemsen-Logo.png" alt="Logo" class="footer-logo">
+                    <p class="footer-text">Gemeinsam stark für Heemsen und die Region. Ihr aktives Netzwerk für Handel, Handwerk und Dienstleistung.</p>
+                </div>
+                <div class="footer-col">
+                    <h4 class="footer-heading">Navigation</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Startseite</a></li>
+                        <li><a href="aktuelles.html">Aktuelles & Termine</a></li>
+                        <li><a href="mitglieder.html">Mitgliederverzeichnis</a></li>
+                        <li><a href="mitglied-werden.html">Mitglied werden</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4 class="footer-heading">Verein</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html#ueber-uns">Über uns & Vorstand</a></li>
+                        <li><a href="index.html#gafa">GAFA Gewerbeschau</a></li>
+                        <li><a href="#">Interner Bereich</a></li>
+                        <li><a href="#">Kontakt</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4 class="footer-heading">Rechtliches</h4>
+                    <ul class="footer-links">
+                        <li><a href="impressum.html">Impressum</a></li>
+                        <li><a href="datenschutz.html">Datenschutz</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Gewerbeverein Heemsen. Alle Rechte vorbehalten.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="main.js"></script>
+    <script>
+        // File Upload UI Logic
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            const dropZone = document.getElementById('drop-zone');
+            const display = document.getElementById('file-name-display');
+            const text = document.getElementById('file-name-text');
+            const content = document.getElementById('upload-content');
+            
+            if (file) {
+                text.textContent = file.name;
+                display.style.display = 'block';
+                content.style.opacity = '0.3';
+                dropZone.style.borderColor = 'var(--primary-color)';
+                dropZone.style.backgroundColor = 'rgba(228, 0, 51, 0.02)';
+            } else {
+                display.style.display = 'none';
+                content.style.opacity = '1';
+                dropZone.style.borderColor = '#d0d0d0';
+                dropZone.style.backgroundColor = '#fafafa';
+            }
+        }
+
+        // Form Submit Simulation
+        function handleMembershipSubmit(event) {
+            event.preventDefault(); // Verhindert echten Seiten-Reload
+            
+            const btn = document.getElementById('submit-btn');
+            const form = document.getElementById('membership-form');
+            const successMsg = document.getElementById('success-message');
+            
+            // Lade-Status anzeigen
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Wird gesendet...';
+            btn.style.opacity = '0.8';
+            btn.disabled = true;
+            
+            // Simuliere Ladezeit (in echt würde hier ein fetch() zum Backend gehen)
+            setTimeout(() => {
+                form.style.display = 'none';
+                successMsg.style.display = 'block';
+                // Hier in Zukunft: Mail-Versand via Cloudflare Worker einbauen
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
