@@ -15,6 +15,67 @@
     
     <!-- Styles -->
     <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* Mobile Optimization for Index Page */
+        @media screen and (max-width: 768px) {
+            /* Fix general section padding */
+            .section {
+                padding: 50px 0 !important;
+            }
+            
+            /* Fix Hero */
+            .hero-title {
+                font-size: 2.5rem !important;
+            }
+            .hero-subtitle {
+                font-size: 1.1rem !important;
+            }
+            
+            /* Fix card grids to not overflow */
+            .card-grid, .benefits-grid {
+                grid-template-columns: 1fr !important;
+                gap: 20px !important;
+            }
+            
+            /* Fix membership CTA box */
+            .cta-box {
+                padding: 30px 20px !important;
+            }
+            .cta-title {
+                font-size: 1.8rem !important;
+            }
+            
+            /* Fix GAFA Section */
+            .gafa-section {
+                padding: 60px 20px !important;
+            }
+            .gafa-title {
+                font-size: 2rem !important;
+            }
+            
+            /* Fix Vorstand Section */
+            .vorstand-container {
+                flex-direction: column !important;
+                gap: 30px !important;
+            }
+            .vorstand-title {
+                font-size: 2rem !important;
+            }
+            
+            /* Divider Image */
+            .divider-img {
+                height: 250px !important;
+            }
+            
+            /* About Grid (if applicable) */
+            .about-grid {
+                grid-template-columns: 1fr !important;
+                gap: 30px !important;
+            }
+        }
+    </style>
+
 </head>
 <body>
 
