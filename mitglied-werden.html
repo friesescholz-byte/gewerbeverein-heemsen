@@ -41,8 +41,8 @@
         .step-number {
             width: 50px;
             height: 50px;
-            background: var(--primary-color);
-            color: white;
+            background-color: #E40033; /* Hardcoded red to fix invisible background issue */
+            color: #ffffff;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -58,11 +58,27 @@
             font-size: 1.3rem;
             color: var(--secondary-color);
             margin-bottom: 15px;
+            font-weight: 700;
         }
         .step-desc {
             color: var(--text-muted);
             line-height: 1.6;
             margin-bottom: 25px;
+            min-height: 48px; /* Ensure same height for all descriptions */
+        }
+        .step-action {
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        .step-action-dummy {
+            background-color: #f8f9fa;
+            color: #6c757d;
+            border: 1px dashed #ced4da;
         }
         
         .upload-form-container {
@@ -258,7 +274,7 @@
                     <div class="step-number">1</div>
                     <h3 class="step-title">Herunterladen</h3>
                     <p class="step-desc">Laden Sie sich bequem unseren offiziellen Mitgliedsantrag als PDF-Dokument herunter.</p>
-                    <a href="#" class="btn btn-outline" style="width: 100%;"><i class="fa-solid fa-download" style="margin-right: 8px;"></i> Antrag (PDF)</a>
+                    <a href="https://pub-b33108412309406a9a941ddc51e9a5b9.r2.dev/gewerbeverein%20heemsen/beitrittserklaerung_gewerbeverein_heemsen_04_2023%5B737%5D%5B230_5843009213952439%5D.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-outline step-action"><i class="fa-solid fa-download" style="margin-right: 8px;"></i> Antrag (PDF)</a>
                 </div>
                 
                 <!-- Step 2 -->
@@ -266,8 +282,8 @@
                     <div class="step-number">2</div>
                     <h3 class="step-title">Ausfüllen</h3>
                     <p class="step-desc">Füllen Sie das Dokument ganz einfach digital aus oder drucken Sie es, um es handschriftlich zu ergänzen.</p>
-                    <div style="height: 48px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); opacity: 0.5;">
-                        <i class="fa-solid fa-pen-to-square" style="font-size: 1.5rem;"></i>
+                    <div class="step-action step-action-dummy">
+                        <i class="fa-solid fa-pen-to-square" style="margin-right: 8px;"></i> Ausfüllen & speichern
                     </div>
                 </div>
                 
@@ -276,7 +292,7 @@
                     <div class="step-number">3</div>
                     <h3 class="step-title">Einreichen</h3>
                     <p class="step-desc">Laden Sie den ausgefüllten Antrag direkt hier über das untenstehende Formular hoch und senden Sie ihn an uns.</p>
-                    <a href="#upload-section" class="btn btn-primary" style="width: 100%;">Zum Upload <i class="fa-solid fa-arrow-down" style="margin-left: 8px;"></i></a>
+                    <a href="#upload-section" class="btn btn-primary step-action">Zum Upload <i class="fa-solid fa-arrow-down" style="margin-left: 8px;"></i></a>
                 </div>
                 
             </div>
