@@ -582,7 +582,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 detailsHtml += `<div class="member-detail-item"><i class="fa-solid fa-envelope"></i> <a href="mailto:${m.email}">${m.email}</a></div>`;
             }
             if (m.website) {
-                const cleanUrl = m.website.replace(/^https?:\\/\\//i, '');
+                const cleanUrl = m.website.replace(/^https?:\/\//i, '');
                 detailsHtml += `<div class="member-detail-item"><i class="fa-solid fa-globe"></i> <a href="${m.website}" target="_blank" rel="noopener noreferrer">${cleanUrl}</a></div>`;
             }
 
