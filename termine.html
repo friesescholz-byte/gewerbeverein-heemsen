@@ -60,75 +60,15 @@
     <section class="section bg-light">
         <div class="container">
             <div class="events-page-grid" id="dynamic-events-page">
-                
-                <!-- Statische Dummy-Einträge für das Design (Werden später durchs Backend ersetzt) -->
-                
-                <!-- Event 1 -->
-                <article class="event-tile">
-                    <div class="event-tile-header">
-                        <div class="event-tile-date">
-                            <span class="day">12</span>
-                            <span class="month">Jun</span>
-                        </div>
-                        <h2 class="event-tile-title">Jahreshauptversammlung 2026</h2>
-                    </div>
-                    <div class="event-tile-body">
-                        <div class="event-tile-meta">
-                            <span><i class="fa-regular fa-clock"></i> 19:00 Uhr</span>
-                            <span><i class="fa-solid fa-location-dot"></i> Alte Schule Rohrsen</span>
-                        </div>
-                        <p class="event-tile-desc">Wir laden alle Mitglieder herzlich zur diesjährigen Jahreshauptversammlung ein. Auf der Agenda stehen unter anderem der Rückblick auf das vergangene Jahr, die Kassenprüfung sowie die Planung kommender Aktivitäten.</p>
-                        <div class="event-tile-footer">
-                            <button class="btn btn-outline btn-sm" onclick="downloadICS('Jahreshauptversammlung 2026', '2026-06-12', '19:00', 'Alte Schule Rohrsen', 'Wir laden alle Mitglieder herzlich zur diesjährigen Jahreshauptversammlung ein.')">In Kalender eintragen</button>
-                        </div>
-                    </div>
-                </article>
-
-                <!-- Event 2 -->
-                <article class="event-tile">
-                    <div class="event-tile-header">
-                        <div class="event-tile-date">
-                            <span class="day">28</span>
-                            <span class="month">Aug</span>
-                        </div>
-                        <h2 class="event-tile-title">Vortrag: Digitalisierung im Mittelstand</h2>
-                    </div>
-                    <div class="event-tile-body">
-                        <div class="event-tile-meta">
-                            <span><i class="fa-regular fa-clock"></i> 18:30 Uhr</span>
-                            <span><i class="fa-solid fa-location-dot"></i> Vereinsheim</span>
-                        </div>
-                        <p class="event-tile-desc">Experte Dr. Müller zeigt praktische Beispiele auf, wie kleine und mittelständische Unternehmen ihre Prozesse effizient digitalisieren können. Im Anschluss gibt es eine offene Diskussionsrunde.</p>
-                        <div class="event-tile-footer">
-                            <button class="btn btn-outline btn-sm" onclick="downloadICS('Vortrag: Digitalisierung', '2026-08-28', '18:30', 'Vereinsheim', 'Experte Dr. Müller zeigt praktische Beispiele auf.')">In Kalender eintragen</button>
-                        </div>
-                    </div>
-                </article>
-
-                <!-- Event 3 -->
-                <article class="event-tile">
-                    <div class="event-tile-header">
-                        <div class="event-tile-date">
-                            <span class="day">15</span>
-                            <span class="month">Okt</span>
-                        </div>
-                        <h2 class="event-tile-title">Gemeinsame Fahrt zur Fachmesse</h2>
-                    </div>
-                    <div class="event-tile-body">
-                        <div class="event-tile-meta">
-                            <span><i class="fa-regular fa-clock"></i> 08:00 Uhr</span>
-                            <span><i class="fa-solid fa-location-dot"></i> Treffpunkt: ZOB Heemsen</span>
-                        </div>
-                        <p class="event-tile-desc">Wir organisieren einen gemeinsamen Bus zur großen Branchenmesse nach Hannover. Für Vereinsmitglieder übernimmt der Gewerbeverein die Fahrtkosten. Um verbindliche Anmeldung wird gebeten.</p>
-                        <div class="event-tile-footer">
-                            <button class="btn btn-outline btn-sm" onclick="downloadICS('Fahrt zur Fachmesse', '2026-10-15', '08:00', 'ZOB Heemsen', 'Wir organisieren einen Bus zur Messe in Hannover.')">In Kalender eintragen</button>
-                        </div>
-                    </div>
-                </article>
-
+                <!-- Termine werden hier dynamisch per JavaScript geladen -->
+                <div style="grid-column: 1 / -1; text-align:center; padding: 40px; color: var(--text-muted);">
+                    <i class="fa-solid fa-circle-notch fa-spin" style="font-size: 2rem; margin-bottom: 15px; color: var(--primary-color); display: block;"></i>
+                    Lade Termine...
+                </div>
             </div>
         </div>
     </section>
+
 
     <!-- Footer -->
     <footer class="footer">
