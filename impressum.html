@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aktuelles - Gewerbeverein Heemsen</title>
-    <meta name="description" content="Neuigkeiten, Aktionen und Rückblicke des Gewerbevereins Heemsen.">
+    <title>Impressum - Gewerbeverein Heemsen</title>
+    <meta name="description" content="Impressum des Gewerbevereins Heemsen e.V.">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -29,7 +29,7 @@
             <nav class="nav-menu" id="nav-menu">
                 <ul class="nav-list">
                     <li class="nav-item"><a href="index.html" class="nav-link">Startseite</a></li>
-                    <li class="nav-item"><a href="aktuelles.html" class="nav-link active">Aktuelles</a></li>
+                    <li class="nav-item"><a href="aktuelles.html" class="nav-link">Aktuelles</a></li>
                     <li class="nav-item"><a href="termine.html" class="nav-link">Termine</a></li>
                     <li class="nav-item"><a href="mitglieder.html" class="nav-link">Mitglieder</a></li>
                     <li class="nav-item"><a href="index.html#ueber-uns" class="nav-link">Über uns</a></li>
@@ -49,51 +49,54 @@
     </header>
 
     <!-- Page Hero -->
-    <section class="page-hero">
+    <section class="page-hero" style="padding: 120px 0 60px;">
         <div class="container">
-            <h1 class="page-title">Aktuelles & Neuigkeiten</h1>
-            <p class="page-subtitle">Bleiben Sie auf dem Laufenden über Aktionen, Rückblicke und Termine des Gewerbevereins Heemsen.</p>
+            <h1 class="page-title">Impressum</h1>
         </div>
     </section>
 
-    <!-- News Grid Section -->
-    <section class="section bg-light">
+    <!-- Impressum Content -->
+    <section class="section bg-light" style="padding: 60px 0 100px;">
         <div class="container">
-            <div class="news-grid-page">
+            <div style="background: white; padding: 50px; border-radius: 16px; box-shadow: 0 5px 25px rgba(0,0,0,0.03); max-width: 800px; margin: 0 auto;">
                 
-                <!-- News werden hier dynamisch per JavaScript geladen -->
-                <div style="text-align:center; padding: 40px; width: 100%; color: var(--text-muted);">Lade Beiträge vom Server...</div>
+                <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.5rem; margin-bottom: 20px; color: var(--primary-color);">Angaben gemäß § 5 TMG</h3>
+                <p style="margin-bottom: 25px; line-height: 1.7;">
+                    <strong>Gewerbeverein Heemsen e.V.</strong><br>
+                    Gadesbünden 136<br>
+                    31622 Heemsen
+                </p>
 
+                <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.2rem; margin-bottom: 15px; color: var(--text-color);">Kontakt</h3>
+                <p style="margin-bottom: 25px; line-height: 1.7;">
+                    <i class="fa-solid fa-envelope" style="color: var(--primary-color); width: 25px;"></i> E-Mail: <a href="mailto:info@gewerbeverein-heemsen.de" style="color: var(--text-color); text-decoration: none; border-bottom: 1px solid var(--primary-color);">info@gewerbeverein-heemsen.de</a><br>
+                    <i class="fa-solid fa-globe" style="color: var(--primary-color); width: 25px;"></i> Internet: <a href="http://www.gewerbeverein-heemsen.de" target="_blank" rel="noopener noreferrer" style="color: var(--text-color); text-decoration: none; border-bottom: 1px solid var(--primary-color);">www.gewerbeverein-heemsen.de</a>
+                </p>
+
+                <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.2rem; margin-bottom: 15px; color: var(--text-color);">Vertretungsberechtigter Vorstand</h3>
+                <p style="margin-bottom: 25px; line-height: 1.7;">
+                    Boris Heidorn (Vorsitzender)
+                </p>
+
+                <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.2rem; margin-bottom: 15px; color: var(--text-color);">Inhaltlich Verantwortlicher gemäß § 55 Abs. 2 RStV</h3>
+                <p style="margin-bottom: 40px; line-height: 1.7;">
+                    Edda Hagebölling
+                </p>
+
+                <hr style="border: 0; border-top: 1px solid #eee; margin: 40px 0;">
+
+                <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.2rem; margin-bottom: 15px; color: var(--text-color);">Datenschutz</h3>
+                <p style="margin-bottom: 30px; line-height: 1.7; color: #555;">
+                    Der Gewerbeverein Heemsen nimmt den Schutz Ihrer persönlichen Daten sehr ernst und hält sich strikt an die Regeln der Datenschutzgesetze. Weitere Informationen entnehmen Sie bitte unserer Datenschutzerklärung.
+                </p>
+
+                <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.2rem; margin-bottom: 15px; color: var(--text-color);">Haftungshinweis</h3>
+                <p style="margin-bottom: 10px; line-height: 1.7; color: #555;">
+                    Trotz sorgfältiger inhaltlicher Kontrolle übernehmen wir keine Haftung für die Inhalte externer Links. Für den Inhalt der verlinkten Seiten sind ausschließlich deren Betreiber verantwortlich.
+                </p>
             </div>
         </div>
     </section>
-
-    <!-- News Modal (Popup) -->
-    <div id="news-modal" class="modal-overlay">
-        <div class="modal-content">
-            <button class="modal-close" id="modal-close"><i class="fa-solid fa-xmark"></i></button>
-            
-            <!-- Slider -->
-            <div class="modal-slider-container" id="modal-slider-container">
-                <div class="modal-slider-track" id="modal-slider-track">
-                    <!-- Images will be injected here -->
-                </div>
-                <!-- Controls -->
-                <button class="slider-btn slider-prev" id="slider-prev"><i class="fa-solid fa-chevron-left"></i></button>
-                <button class="slider-btn slider-next" id="slider-next"><i class="fa-solid fa-chevron-right"></i></button>
-                <!-- Dots -->
-                <div class="slider-dots" id="slider-dots"></div>
-            </div>
-
-            <div class="modal-text-container">
-                <span class="news-date modal-date" id="modal-date"></span>
-                <h2 class="news-title modal-title" id="modal-title"></h2>
-                <div class="modal-body" id="modal-body">
-                    <!-- Text content will be injected here -->
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Footer -->
     <footer class="footer">
@@ -130,7 +133,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 Gewerbeverein Heemsen e.V. – Alle Rechte vorbehalten.</p>
+                <p>&copy; 2026 Gewerbeverein Heemsen. Alle Rechte vorbehalten.</p>
             </div>
         </div>
     </footer>
