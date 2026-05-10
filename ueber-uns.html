@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Über uns & Vorstand - Gewerbeverein Heemsen</title>
+    <meta name="description" content="Der Gewerbeverein Heemsen steht für Gemeinschaft, Austausch und die Stärkung der regionalen Wirtschaft. Lernen Sie unseren Vorstand kennen.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;500;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome (Icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .vision-section {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+            border-radius: 24px;
+            margin-bottom: 80px;
+            box-shadow: 0 15px 40px rgba(228, 0, 51, 0.2);
+        }
+        .vision-heading {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            font-weight: 800;
+        }
+        .vision-text {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            max-width: 800px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+
+        .history-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            margin-bottom: 100px;
+        }
+        .history-content h2 {
+            font-family: 'Outfit', sans-serif;
+            color: var(--secondary-color);
+            font-size: 2rem;
+            margin-bottom: 25px;
+        }
+        .history-content p {
+            color: var(--text-muted);
+            line-height: 1.8;
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+        }
+        .history-image {
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+        .history-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+        }
+        @media (max-width: 992px) {
+            .history-grid { grid-template-columns: 1fr; gap: 40px; }
+        }
+
+        .board-section {
+            background-color: white;
+            padding: 80px 0;
+            border-radius: 24px;
+            box-shadow: 0 5px 30px rgba(0,0,0,0.02);
+        }
+        .board-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        .board-header h2 {
+            font-family: 'Outfit', sans-serif;
+            color: var(--secondary-color);
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .board-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .board-card {
+            background: #fafafa;
+            border-radius: 16px;
+            padding: 40px 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid #f0f0f0;
+        }
+        .board-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.05);
+            background: white;
+            border-color: rgba(228, 0, 51, 0.1);
+        }
+        .board-icon {
+            width: 70px;
+            height: 70px;
+            background: rgba(228, 0, 51, 0.1);
+            color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin: 0 auto 20px;
+        }
+        .board-role {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        .board-name {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+        }
+        .board-contact {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        .board-contact a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .board-contact a:hover {
+            color: var(--primary-color);
+        }
+        .board-contact i {
+            width: 20px;
+            color: var(--primary-color);
+            margin-right: 5px;
+            opacity: 0.8;
+        }
+        .contact-item {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header & Navigation -->
+    <header class="header" id="header">
+        <div class="container header-container">
+            <a href="index.html" class="logo">
+                <img src="https://pub-b33108412309406a9a941ddc51e9a5b9.r2.dev/gewerbeverein%20heemsen/Gewerbeverein-Heemsen-Logo.png" alt="Gewerbeverein Heemsen Logo">
+            </a>
+            
+            <nav class="nav-menu" id="nav-menu">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="index.html" class="nav-link">Startseite</a></li>
+                    <li class="nav-item"><a href="aktuelles.html" class="nav-link">Aktuelles</a></li>
+                    <li class="nav-item"><a href="termine.html" class="nav-link">Termine</a></li>
+                    <li class="nav-item"><a href="mitglieder.html" class="nav-link">Mitglieder</a></li>
+                    <li class="nav-item"><a href="ueber-uns.html" class="nav-link">Über uns</a></li>
+                    <li class="nav-item"><a href="index.html#gafa" class="nav-link">GAFA</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <a href="mitglied-werden.html" class="btn btn-outline">Mitglied werden</a>
+                </div>
+            </nav>
+
+            <button class="hamburger" id="hamburger" aria-label="Menü öffnen">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Page Hero -->
+    <section class="page-hero" style="padding: 120px 0 40px;">
+        <div class="container">
+            <h1 class="page-title">Über den Gewerbeverein</h1>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="section bg-light" style="padding: 40px 0 100px;">
+        <div class="container">
+            
+            <!-- Vision Banner -->
+            <div class="vision-section">
+                <h2 class="vision-heading">Regional verwurzelt. Gemeinsam engagiert. Zukunft im Blick.</h2>
+                <p class="vision-text">Der Gewerbeverein Heemsen steht für Gemeinschaft, Austausch und die Stärkung der regionalen Wirtschaft. Wir verbinden Unternehmen, schaffen Sichtbarkeit und fördern ein lebendiges Netzwerk für Heemsen und die gesamte Samtgemeinde.</p>
+            </div>
+
+            <!-- History Section -->
+            <div class="history-grid">
+                <div class="history-content">
+                    <h2>Gemeinsam stark für unsere Region</h2>
+                    <p>Seit 1982 macht der Gewerbeverein Heemsen sichtbar, was unsere Gemeinde und die umliegenden Orte zu bieten haben: engagierte Unternehmen, starke Handwerksbetriebe, vielseitige Dienstleister und ein lebendiges Miteinander.</p>
+                    <p>Gegründet wurde der Verein mit dem Ziel, die wirtschaftliche Stärke der Gemeinde Heemsen stärker in die Öffentlichkeit zu tragen. Durch die verkehrsgünstige Lage zwischen den Bundesstraßen 209 und 215 war schon damals klar: Heemsen ist ein attraktiver Standort mit großem Potenzial.</p>
+                    <p>Bereits im April 1983 fand unter dem damaligen Vorsitzenden Heinrich Dreeke die erste Gewerbeschau statt. Auf dem rund 8.000 Quadratmeter großen Gelände der Firmen Dreeke und Schaardt an der Schulstraße präsentierten 21 Aussteller aus Heemsen und den Ortsteilen ihre Leistungen. Sie zeigten eindrucksvoll, wie vielfältig Handel, Handwerk und Dienstleistung direkt vor Ort vertreten sind.</p>
+                    <p>Der große Zuspruch aus Heemsen und der gesamten Umgebung war der Startschuss für weitere erfolgreiche Gewerbeschauen. Ein besonderer Höhepunkt war die Regionalschau GAFA 2018 im Gewerbegebiet Drakenburg, die mit großer Resonanz und beeindruckender Beteiligung stattfand.</p>
+                    <p>Heute zählt der Gewerbeverein Heemsen 85 Mitglieder. Die stetig wachsende Mitgliederzahl zeigt, wie wichtig Austausch, Zusammenhalt und regionale Sichtbarkeit für die Betriebe vor Ort sind.</p>
+                    <p>Neben der Jahreshauptversammlung im Winter gehören auch Fachvorträge, gemeinsame Fahrten und besondere Veranstaltungen zum Vereinsleben. Fest etabliert hat sich zudem „Die Samtgemeinde Heemsen radelt“. Dabei erhalten die Teilnehmenden spannende Einblicke hinter die Kulissen regionaler Betriebe. Der gemeinsame Abschluss findet traditionell beim Erdbeerfest in Rohrsen statt.</p>
+                </div>
+                <div class="history-image">
+                    <img src="https://pub-b33108412309406a9a941ddc51e9a5b9.r2.dev/gewerbeverein%20heemsen/Gewerbeverein-Heemsen-Logo.png" alt="Gewerbeverein Heemsen Logo" style="max-width: 80%; margin: 20px auto;">
+                </div>
+            </div>
+
+            <!-- Board Section -->
+            <div class="board-section" id="vorstand">
+                <div class="board-header">
+                    <h2>Unser Vorstand</h2>
+                    <p style="color: var(--text-muted);">Die Ansprechpartner des Gewerbevereins Heemsen</p>
+                </div>
+                
+                <div class="board-grid" style="padding: 0 40px;">
+                    
+                    <!-- 1. Vorsitzender -->
+                    <div class="board-card">
+                        <div class="board-icon"><i class="fa-solid fa-user-tie"></i></div>
+                        <div class="board-role">1. Vorsitzender</div>
+                        <h3 class="board-name">Boris Heidorn</h3>
+                        <div class="board-contact">
+                            <div class="contact-item">
+                                <i class="fa-solid fa-location-dot"></i>
+                                <span>Gadesbünden 136<br>31622 Heemsen</span>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fa-solid fa-phone"></i>
+                                <span><a href="tel:01725134803">0172-5134803</a></span>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fa-solid fa-envelope"></i>
+                                <span><a href="mailto:info@der-fliesenleger.com">info@der-fliesenleger.com</a></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Vorsitzender -->
+                    <div class="board-card">
+                        <div class="board-icon"><i class="fa-solid fa-user-tie"></i></div>
+                        <div class="board-role">2. Vorsitzender</div>
+                        <h3 class="board-name">Jörn Heidorn</h3>
+                        <div class="board-contact">
+                            <div class="contact-item">
+                                <i class="fa-solid fa-location-dot"></i>
+                                <span>Gadesbünden 122<br>31622 Heemsen</span>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fa-solid fa-phone"></i>
+                                <span><a href="tel:05024880180">(0 50 24) 88 01 80</a></span>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fa-solid fa-envelope"></i>
+                                <span><a href="mailto:j.heidorn@heidorn-industrie.de">j.heidorn@heidorn-industrie.de</a></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kassenwart -->
+                    <div class="board-card">
+                        <div class="board-icon"><i class="fa-solid fa-wallet"></i></div>
+                        <div class="board-role">Kassenwart</div>
+                        <h3 class="board-name">Wilfried Dierks</h3>
+                        <div class="board-contact">
+                            <div class="contact-item">
+                                <i class="fa-solid fa-location-dot"></i>
+                                <span>Hofstraße 2<br>31627 Rohrsen</span>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fa-solid fa-phone"></i>
+                                <span><a href="tel:05024611">(0 50 24) 6 11</a></span>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fa-solid fa-envelope"></i>
+                                <span><a href="mailto:gasthaus-siemer@t-online.de">gasthaus-siemer@t-online.de</a></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 1. Schriftführer -->
+                    <div class="board-card">
+                        <div class="board-icon"><i class="fa-solid fa-pen-nib"></i></div>
+                        <div class="board-role">1. Schriftführer</div>
+                        <h3 class="board-name">Helge Ahrens</h3>
+                        <div class="board-contact">
+                            <div class="contact-item">
+                                <i class="fa-solid fa-location-dot"></i>
+                                <span>Birkenweg 6<br>31627 Rohrsen</span>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fa-solid fa-phone"></i>
+                                <span><a href="tel:05024887668">(0 50 24) 88 76 68</a></span>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fa-solid fa-envelope"></i>
+                                <span><a href="mailto:ahrensundalbertholzbau@t-online.de">ahrensundalbertholzbau@t-online.de</a></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Schriftführer -->
+                    <div class="board-card">
+                        <div class="board-icon"><i class="fa-solid fa-pen-nib"></i></div>
+                        <div class="board-role">2. Schriftführer</div>
+                        <h3 class="board-name">Frank Schmidtchen</h3>
+                        <div class="board-contact">
+                            <div class="contact-item">
+                                <i class="fa-solid fa-location-dot"></i>
+                                <span>Gadesbünden 119<br>31622 Heemsen</span>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fa-solid fa-phone"></i>
+                                <span><a href="tel:05024944414">(0 50 24) 94 44 14</a></span>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fa-solid fa-envelope"></i>
+                                <span><a href="mailto:info@gewerbeverein-heemsen.de">info@gewerbeverein-heemsen.de</a></span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <img src="https://pub-b33108412309406a9a941ddc51e9a5b9.r2.dev/gewerbeverein%20heemsen/Gewerbeverein-Heemsen-Logo.png" alt="Logo" class="footer-logo">
+                    <p class="footer-text">Gemeinsam stark für Heemsen und die Region. Ihr aktives Netzwerk für Handel, Handwerk und Dienstleistung.</p>
+                </div>
+                <div class="footer-col">
+                    <h4 class="footer-heading">Navigation</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Startseite</a></li>
+                        <li><a href="aktuelles.html">Aktuelles & Termine</a></li>
+                        <li><a href="mitglieder.html">Mitgliederverzeichnis</a></li>
+                        <li><a href="mitglied-werden.html">Mitglied werden</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4 class="footer-heading">Verein</h4>
+                    <ul class="footer-links">
+                        <li><a href="ueber-uns.html">Über uns & Vorstand</a></li>
+                        <li><a href="index.html#gafa">GAFA Gewerbeschau</a></li>
+                        <li><a href="#">Interner Bereich</a></li>
+                        <li><a href="#">Kontakt</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4 class="footer-heading">Rechtliches</h4>
+                    <ul class="footer-links">
+                        <li><a href="impressum.html">Impressum</a></li>
+                        <li><a href="datenschutz.html">Datenschutz</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Gewerbeverein Heemsen. Alle Rechte vorbehalten.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="main.js"></script>
+</body>
+</html>
