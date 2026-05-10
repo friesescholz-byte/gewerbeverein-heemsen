@@ -165,6 +165,20 @@
             align-items: flex-start;
             text-align: left;
         }
+
+        /* Mobile Optimization */
+        @media (max-width: 768px) {
+            .vision-section { padding: 40px 20px; border-radius: 16px; margin-bottom: 50px; }
+            .vision-heading { font-size: 1.8rem; }
+            .vision-text { font-size: 1rem; }
+            .history-grid { margin-bottom: 60px; }
+            .history-content h2 { font-size: 1.6rem; }
+            .board-section { padding: 40px 0; }
+            .board-header { margin-bottom: 40px; }
+            .board-header h2 { font-size: 1.8rem; }
+            .board-grid { padding: 0 20px !important; gap: 15px; }
+            .board-card { padding: 30px 20px; }
+        }
     </style>
 </head>
 <body>
@@ -227,7 +241,8 @@
                     <p>Neben der Jahreshauptversammlung im Winter gehören auch Fachvorträge, gemeinsame Fahrten und besondere Veranstaltungen zum Vereinsleben. Fest etabliert hat sich zudem „Die Samtgemeinde Heemsen radelt“. Dabei erhalten die Teilnehmenden spannende Einblicke hinter die Kulissen regionaler Betriebe. Der gemeinsame Abschluss findet traditionell beim Erdbeerfest in Rohrsen statt.</p>
                 </div>
                 <div class="history-image">
-                    <img src="https://pub-b33108412309406a9a941ddc51e9a5b9.r2.dev/gewerbeverein%20heemsen/Gewerbeverein-Heemsen-Logo.png" alt="Gewerbeverein Heemsen Logo" style="max-width: 80%; margin: 20px auto;">
+                    <img src="https://pub-b33108412309406a9a941ddc51e9a5b9.r2.dev/gewerbeverein%20heemsen/Gewerbeverein-Heemsen-Logo.png" alt="Gewerbeverein Heemsen Logo" style="max-width: 80%; margin: 0 auto 30px; display: block;">
+                    <img src="https://pub-b33108412309406a9a941ddc51e9a5b9.r2.dev/gewerbeverein%20heemsen/vorstand_2022-142997-11-13.webp" alt="Vorstand des Gewerbevereins Heemsen" style="max-width: 100%; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); display: block;">
                 </div>
             </div>
 
@@ -236,10 +251,6 @@
                 <div class="board-header">
                     <h2>Unser Vorstand</h2>
                     <p style="color: var(--text-muted);">Die Ansprechpartner des Gewerbevereins Heemsen</p>
-                </div>
-                
-                <div class="board-image-container" style="text-align: center; margin-bottom: 50px; padding: 0 40px;">
-                    <img src="https://pub-b33108412309406a9a941ddc51e9a5b9.r2.dev/gewerbeverein%20heemsen/vorstand_2022-142997-11-13.webp" alt="Vorstand des Gewerbevereins Heemsen" style="max-width: 100%; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
                 </div>
                 
                 <div class="board-grid" style="padding: 0 40px;">
