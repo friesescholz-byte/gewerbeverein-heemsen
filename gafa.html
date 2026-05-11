@@ -221,6 +221,12 @@
             margin-bottom: 5px;
             font-family: 'Outfit', sans-serif;
         }
+    
+        .gafa-gallery-img:hover {
+            transform: scale(1.02);
+            z-index: 2;
+            position: relative;
+        }
     </style>
 
     <!-- Favicon -->
@@ -298,6 +304,26 @@
                     <a href="#upload-section" class="btn btn-primary step-action">Zum Upload <i class="fa-solid fa-arrow-down" style="margin-left: 8px;"></i></a>
                 </div>
                 
+            </div>
+        </div>
+    </section>
+
+    
+    <!-- GAFA Gallery Section -->
+    <section class="section bg-light" id="gafa-gallery-section" style="padding: 10px 0 40px;">
+        <div class="container">
+            <h2 style="text-align: center; font-family: 'Outfit', sans-serif; font-size: 2.2rem; margin-bottom: 40px; color: var(--secondary-color);">Eindrücke der letzten GAFA</h2>
+            <div class="gafa-gallery" id="gafa-gallery" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
+                <img src="https://pub-b33108412309406a9a941ddc51e9a5b9.r2.dev/gewerbeverein%20heemsen/Gafa/img_0272.jpg" alt="GAFA Impression" class="gafa-gallery-img" style="width: 100%; height: 250px; object-fit: cover; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transition: transform 0.3s ease;">
+                <img src="https://pub-b33108412309406a9a941ddc51e9a5b9.r2.dev/gewerbeverein%20heemsen/Gafa/img_0288.jpg" alt="GAFA Impression" class="gafa-gallery-img" style="width: 100%; height: 250px; object-fit: cover; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transition: transform 0.3s ease;">
+                <img src="https://pub-b33108412309406a9a941ddc51e9a5b9.r2.dev/gewerbeverein%20heemsen/Gafa/img_0391.jpg" alt="GAFA Impression" class="gafa-gallery-img" style="width: 100%; height: 250px; object-fit: cover; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transition: transform 0.3s ease;">
+                <img src="https://pub-b33108412309406a9a941ddc51e9a5b9.r2.dev/gewerbeverein%20heemsen/Gafa/img_6491.jpg" alt="GAFA Impression" class="gafa-gallery-img" style="width: 100%; height: 250px; object-fit: cover; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transition: transform 0.3s ease;">
+                <img src="https://pub-b33108412309406a9a941ddc51e9a5b9.r2.dev/gewerbeverein%20heemsen/Gafa/img_6692.jpg" alt="GAFA Impression" class="gafa-gallery-img" style="width: 100%; height: 250px; object-fit: cover; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transition: transform 0.3s ease;">
+                <img src="https://pub-b33108412309406a9a941ddc51e9a5b9.r2.dev/gewerbeverein%20heemsen/Gafa/img_6953.jpg" alt="GAFA Impression" class="gafa-gallery-img" style="width: 100%; height: 250px; object-fit: cover; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transition: transform 0.3s ease;">
+                <img src="https://pub-b33108412309406a9a941ddc51e9a5b9.r2.dev/gewerbeverein%20heemsen/Gafa/img_6940.jpg" alt="GAFA Impression" class="gafa-gallery-img" style="width: 100%; height: 250px; object-fit: cover; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transition: transform 0.3s ease; display: none;">
+            </div>
+            <div style="text-align: center; margin-top: 40px;">
+                <button id="load-more-btn" class="btn btn-outline" style="min-width: 200px;" onclick="loadMoreImages()">Mehr laden <i class="fa-solid fa-chevron-down" style="margin-left: 8px;"></i></button>
             </div>
         </div>
     </section>
@@ -408,7 +434,18 @@
     </footer>
 
     <!-- Scripts -->
-    <script src="main.js"></script>
+    <script src="main.js">
+        // Gallery Load More Logic
+        function loadMoreImages() {
+            const hiddenImages = document.querySelectorAll('.gafa-gallery-img[style*="display: none"]');
+            for(let i=0; i<6 && i<hiddenImages.length; i++) {
+                hiddenImages[i].style.display = 'block';
+            }
+            if(document.querySelectorAll('.gafa-gallery-img[style*="display: none"]').length === 0) {
+                document.getElementById('load-more-btn').style.display = 'none';
+            }
+        }
+    </script>
     <script>
         // File Upload UI Logic
         function handleFileSelect(event) {
@@ -452,6 +489,17 @@
                 successMsg.style.display = 'block';
                 // Hier in Zukunft: Mail-Versand via Cloudflare Worker einbauen
             }, 1500);
+        }
+    
+        // Gallery Load More Logic
+        function loadMoreImages() {
+            const hiddenImages = document.querySelectorAll('.gafa-gallery-img[style*="display: none"]');
+            for(let i=0; i<6 && i<hiddenImages.length; i++) {
+                hiddenImages[i].style.display = 'block';
+            }
+            if(document.querySelectorAll('.gafa-gallery-img[style*="display: none"]').length === 0) {
+                document.getElementById('load-more-btn').style.display = 'none';
+            }
         }
     </script>
 </body>
