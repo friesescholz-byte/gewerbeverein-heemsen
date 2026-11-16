@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Gewerbeverein Heemsen</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/png" href="https://pub-b33108412309406a9a941ddc51e9a5b9.r2.dev/gewerbeverein%20heemsen/GH_Logo_hochaufloesend_transparent.png">
+    
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Cloudflare Turnstile -->
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+    <style>
+        :root {
+            --primary: #c1121f;
+            --primary-hover: #9c0e18;
+            --primary-subtle: rgba(193, 18, 31, 0.08);
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --border: #e2e8f0;
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --radius: 10px;
+            --radius-lg: 14px;
+            --shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06);
+            --shadow-lg: 0 12px 32px -4px rgba(15, 23, 42, 0.12);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.5; }
+
+        /* Lockscreen */
+        .lockscreen {
+            position: fixed; inset: 0; background: var(--bg);
+            display: flex; align-items: center; justify-content: center;
+            padding: 20px; z-index: 9999;
+        }
+        .lock-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: var(--radius-lg); padding: 40px; width: 100%; max-width: 420px;
+            box-shadow: var(--shadow-lg); text-align: center;
+        }
+        .lock-icon {
+            width: 56px; height: 56px; background: var(--primary-subtle); color: var(--primary);
+            border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
+            font-size: 24px; margin-bottom: 20px;
+        }
+        .lock-card h2 { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+        .lock-card p { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; }
+
+        /* Form elements */
+        .form-group { margin-bottom: 18px; text-align: left; }
+        label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--text); }
+        .help-text { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; display: block; }
+        input[type="text"], input[type="password"], input[type="date"], input[type="time"], input[type="email"], textarea, select {
+            width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: var(--radius);
+            font-family: inherit; font-size: 14px; background: var(--surface); color: var(--text);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        input:focus, textarea:focus, select:focus {
+            outline: none; border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-subtle);
+        }
+        textarea { resize: vertical; min-height: 90px; }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            padding: 10px 18px; border-radius: var(--radius); font-size: 14px; font-weight: 600;
+            border: none; cursor: pointer; text-decoration: none; transition: all 0.2s;
+        }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-hover); }
+        .btn-secondary { background: var(--surface); border: 1px solid var(--border); color: var(--text); }
+        .btn-secondary:hover { background: #f1f5f9; border-color: #cbd5e1; }
+        .btn-danger { background: #fee2e2; color: #b91c1c; }
+        .btn-danger:hover { background: #fecaca; }
+        .btn-sm { padding: 6px 12px; font-size: 13px; }
+        .btn-block { width: 100%; }
+
+        /* App Layout */
+        .app-header {
+            background: var(--surface); border-bottom: 1px solid var(--border);
+            padding: 14px 28px; display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 100;
+        }
+        .app-brand { display: flex; align-items: center; gap: 14px; text-decoration: none; color: inherit; }
+        .app-brand img { height: 38px; width: auto; object-fit: contain; }
+        .app-brand span { font-weight: 700; font-size: 16px; }
+        .app-brand small { color: var(--text-muted); font-size: 12px; font-weight: 500; display: block; }
+        .header-actions { display: flex; align-items: center; gap: 10px; }
+
+        .container { max-width: 1200px; margin: 32px auto; padding: 0 20px; }
+
+        /* Tabs */
+        .tabs-nav {
+            display: flex; gap: 8px; border-bottom: 1px solid var(--border);
+            margin-bottom: 24px; padding-bottom: 8px; overflow-x: auto;
+        }
+        .tab-btn {
+            background: none; border: none; padding: 10px 18px; font-size: 14px; font-weight: 600;
+            color: var(--text-muted); border-radius: var(--radius); cursor: pointer; transition: all 0.2s;
+            display: inline-flex; align-items: center; gap: 8px; white-space: nowrap;
+        }
+        .tab-btn:hover { color: var(--text); background: #f1f5f9; }
+        .tab-btn.active { color: var(--primary); background: var(--primary-subtle); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.2s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Panel Card */
+        .panel {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: var(--radius-lg); box-shadow: var(--shadow); overflow: hidden;
+        }
+        .panel-header {
+            padding: 20px 24px; border-bottom: 1px solid var(--border);
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;
+        }
+        .panel-title { font-size: 18px; font-weight: 700; }
+        .panel-count { font-size: 13px; color: var(--text-muted); font-weight: 500; margin-left: 8px; }
+
+        /* Tables */
+        .table-responsive { width: 100%; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; }
+        th { background: #f8fafc; padding: 12px 20px; font-weight: 600; color: var(--text-muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); }
+        td { padding: 16px 20px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: #fafafa; }
+
+        .item-thumb { width: 48px; height: 48px; border-radius: 8px; object-fit: cover; border: 1px solid var(--border); }
+        .badge { display: inline-block; padding: 3px 8px; border-radius: 6px; font-size: 12px; font-weight: 600; background: #e2e8f0; color: #334155; }
+        .badge-primary { background: var(--primary-subtle); color: var(--primary); }
+
+        /* Modal */
+        .modal {
+            position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6);
+            display: none; align-items: center; justify-content: center;
+            padding: 20px; z-index: 1000; backdrop-filter: blur(2px);
+        }
+        .modal.active { display: flex; }
+        .modal-dialog {
+            background: var(--surface); border-radius: var(--radius-lg); width: 100%; max-width: 680px;
+            max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow-lg); border: 1px solid var(--border);
+        }
+        .modal-header {
+            padding: 20px 28px; border-bottom: 1px solid var(--border);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .modal-title { font-size: 18px; font-weight: 700; }
+        .modal-close { background: none; border: none; font-size: 20px; color: var(--text-muted); cursor: pointer; padding: 4px; }
+        .modal-close:hover { color: var(--text); }
+        .modal-body { padding: 28px; }
+        .modal-footer {
+            padding: 16px 28px; border-top: 1px solid var(--border);
+            display: flex; justify-content: flex-end; gap: 10px; background: #fafafa;
+            border-bottom-left-radius: var(--radius-lg); border-bottom-right-radius: var(--radius-lg);
+        }
+
+        /* Upload Area */
+        .dropzone {
+            border: 2px dashed var(--border); border-radius: var(--radius); padding: 24px;
+            text-align: center; background: #fafafa; cursor: pointer; transition: all 0.2s;
+        }
+        .dropzone:hover { border-color: var(--primary); background: #fff5f5; }
+        .dropzone i { font-size: 28px; color: var(--primary); margin-bottom: 8px; }
+        .preview-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+        .preview-box {
+            position: relative; width: 72px; height: 72px; border-radius: 8px;
+            overflow: hidden; border: 1px solid var(--border); background: #fff;
+        }
+        .preview-box img { width: 100%; height: 100%; object-fit: cover; }
+        .preview-box button {
+            position: absolute; top: 3px; right: 3px; background: rgba(15, 23, 42, 0.7);
+            color: #fff; border: none; border-radius: 50%; width: 20px; height: 20px;
+            display: flex; align-items: center; justify-content: center; font-size: 11px; cursor: pointer;
+        }
+        .preview-box button:hover { background: #dc2626; }
+
+        /* Toast Notifications */
+        .toast {
+            position: fixed; bottom: 24px; right: 24px; background: var(--text); color: #fff;
+            padding: 12px 20px; border-radius: var(--radius); font-size: 14px; font-weight: 500;
+            box-shadow: var(--shadow-lg); z-index: 2000; transform: translateY(100px);
+            opacity: 0; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .toast.show { transform: translateY(0); opacity: 1; }
+        .toast-success { background: #059669; }
+        .toast-error { background: #dc2626; }
+
+        @media (max-width: 768px) {
+            .app-header { padding: 12px 16px; }
+            .container { margin: 16px auto; padding: 0 12px; }
+            .modal-body { padding: 18px; }
+            .table-responsive { font-size: 13px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- LOCKSCREEN (GATEKEEPER) -->
+    <div id="lockscreen" class="lockscreen">
+        <div class="lock-card">
+            <div class="lock-icon">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+            <h2>Admin-Anmeldung</h2>
+            <p>Gewerbeverein Heemsen – Verwaltung</p>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="password">Passwort</label>
+                    <input type="password" id="password" required autofocus placeholder="Passwort eingeben" autocomplete="current-password">
+                </div>
+                
+                <!-- Cloudflare Turnstile -->
+                <div style="display: flex; justify-content: center; margin: 18px 0;">
+                    <div class="cf-turnstile" data-sitekey="0x4AAAAAADVEqwJz-pyeZXi0" data-theme="light"></div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block" id="btnLogin">
+                    <span>Anmelden</span> <i class="fa-solid fa-arrow-right"></i>
+                </button>
+                <p id="loginError" style="color: #dc2626; font-size: 13px; margin-top: 14px; display: none;"></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- MAIN APP -->
+    <div id="adminApp" style="display: none;">
+        <header class="app-header">
+            <a href="/" class="app-brand" target="_blank" title="Zur Website">
+                <img src="https://pub-b33108412309406a9a941ddc51e9a5b9.r2.dev/gewerbeverein%20heemsen/GH_Logo_hochaufloesend_transparent.png" alt="Logo">
+                <div>
+                    <span>Gewerbeverein Heemsen</span>
+                    <small>Verwaltungs-Dashboard</small>
+                </div>
+            </a>
+            <div class="header-actions">
+                <a href="/" class="btn btn-secondary btn-sm" target="_blank">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i> <span>Website öffnen</span>
+                </a>
+                <button class="btn btn-secondary btn-sm" onclick="logout()">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i> <span>Abmelden</span>
+                </button>
+            </div>
+        </header>
+
+        <main class="container">
+            <!-- TABS NAVIGATION -->
+            <nav class="tabs-nav">
+                <button class="tab-btn active" onclick="switchTab('news')">
+                    <i class="fa-solid fa-newspaper"></i> <span>Aktuelles / Beiträge</span>
+                </button>
+                <button class="tab-btn" onclick="switchTab('events')">
+                    <i class="fa-solid fa-calendar-days"></i> <span>Terminkalender</span>
+                </button>
+                <button class="tab-btn" onclick="switchTab('members')">
+                    <i class="fa-solid fa-users"></i> <span>Mitgliederverzeichnis</span>
+                </button>
+            </nav>
+
+            <!-- TAB 1: NEWS -->
+            <section id="tab-news" class="tab-content active">
+                <div class="panel">
+                    <div class="panel-header">
+                        <div>
+                            <span class="panel-title">Aktuelle Beiträge</span>
+                            <span class="panel-count" id="newsCount">(Lade...)</span>
+                        </div>
+                        <button class="btn btn-primary btn-sm" onclick="openNewsModal()">
+                            <i class="fa-solid fa-plus"></i> Neuer Beitrag
+                        </button>
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width: 70px;">Bild</th>
+                                    <th style="width: 110px;">Datum</th>
+                                    <th>Titel</th>
+                                    <th>Auszug</th>
+                                    <th style="width: 140px; text-align: right;">Aktionen</th>
+                                </tr>
+                            </thead>
+                            <tbody id="newsTableBody">
+                                <tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 30px;">Lade Beiträge...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 2: EVENTS -->
+            <section id="tab-events" class="tab-content">
+                <div class="panel">
+                    <div class="panel-header">
+                        <div>
+                            <span class="panel-title">Termine & Veranstaltungen</span>
+                            <span class="panel-count" id="eventsCount">(Lade...)</span>
+                        </div>
+                        <button class="btn btn-primary btn-sm" onclick="openEventModal()">
+                            <i class="fa-solid fa-plus"></i> Neuer Termin
+                        </button>
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width: 130px;">Datum / Uhrzeit</th>
+                                    <th>Veranstaltung</th>
+                                    <th>Ort / Treffpunkt</th>
+                                    <th style="width: 140px; text-align: right;">Aktionen</th>
+                                </tr>
+                            </thead>
+                            <tbody id="eventsTableBody">
+                                <tr><td colspan="4" style="text-align: center; color: var(--text-muted); padding: 30px;">Lade Termine...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 3: MEMBERS -->
+            <section id="tab-members" class="tab-content">
+                <div class="panel">
+                    <div class="panel-header">
+                        <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
+                            <div>
+                                <span class="panel-title">Mitgliederverzeichnis</span>
+                                <span class="panel-count" id="membersCount">(Lade...)</span>
+                            </div>
+                            <input type="text" id="memberSearch" placeholder="Mitglieder durchsuchen..." style="width: 220px; padding: 6px 12px; font-size: 13px;">
+                        </div>
+                        <button class="btn btn-primary btn-sm" onclick="openMemberModal()">
+                            <i class="fa-solid fa-plus"></i> Neues Mitglied
+                        </button>
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width: 60px;">Logo</th>
+                                    <th>Unternehmen</th>
+                                    <th>Kontakt</th>
+                                    <th>Gewerke / Tags</th>
+                                    <th style="width: 140px; text-align: right;">Aktionen</th>
+                                </tr>
+                            </thead>
+                            <tbody id="membersTableBody">
+                                <tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 30px;">Lade Mitglieder...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- MODAL: NEWS -->
+    <div id="modalNews" class="modal">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalNewsTitle">Beitrag erstellen</h3>
+                <button class="modal-close" onclick="closeModals()">&times;</button>
+            </div>
+            <form id="formNews">
+                <div class="modal-body">
+                    <input type="hidden" id="newsId">
+                    <div class="form-group">
+                        <label for="newsTitleInput">Titel des Beitrags *</label>
+                        <input type="text" id="newsTitleInput" required placeholder="Z. B. Erfolgreiche Jahreshauptversammlung">
+                    </div>
+                    <div class="form-group">
+                        <label for="newsDateInput">Datum *</label>
+                        <input type="text" id="newsDateInput" required placeholder="Z. B. 22.06.2026">
+                    </div>
+                    <div class="form-group">
+                        <label for="newsExcerptInput">Kurzer Auszug (für Übersichtskarte) *</label>
+                        <span class="help-text">1-2 Sätze, die auf der Startseite und in der Beitragsübersicht erscheinen.</span>
+                        <textarea id="newsExcerptInput" required style="min-height: 70px;" placeholder="Gemeinsam radeln und heimische Betriebe kennenlernen..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="newsContentInput">Ausführlicher Inhalt *</label>
+                        <span class="help-text">Absätze einfach mit Enter trennen.</span>
+                        <textarea id="newsContentInput" required style="min-height: 160px;" placeholder="Hier den vollständigen Text einfügen..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Fotos / Bilder</label>
+                        <div class="dropzone" onclick="document.getElementById('newsFileInput').click()">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                            <div style="font-weight: 600; font-size: 13px;">Bilder auswählen oder hierher ziehen</div>
+                            <span class="help-text">JPG, PNG oder WebP</span>
+                            <input type="file" id="newsFileInput" multiple accept="image/*" style="display: none;" onchange="handleNewsImageSelect(event)">
+                        </div>
+                        <div class="preview-grid" id="newsPreviewGrid"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModals()">Abbrechen</button>
+                    <button type="submit" class="btn btn-primary" id="btnSaveNews">Speichern</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: EVENT -->
+    <div id="modalEvent" class="modal">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalEventTitle">Termin erstellen</h3>
+                <button class="modal-close" onclick="closeModals()">&times;</button>
+            </div>
+            <form id="formEvent">
+                <div class="modal-body">
+                    <input type="hidden" id="eventId">
+                    <div class="form-group">
+                        <label for="eventTitleInput">Titel der Veranstaltung *</label>
+                        <input type="text" id="eventTitleInput" required placeholder="Z. B. Stammtisch Gewerbeverein">
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                        <div class="form-group">
+                            <label for="eventDateInput">Datum *</label>
+                            <input type="date" id="eventDateInput" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="eventTimeInput">Uhrzeit</label>
+                            <input type="time" id="eventTimeInput" placeholder="19:00">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="eventLocationInput">Ort / Treffpunkt *</label>
+                        <input type="text" id="eventLocationInput" required placeholder="Z. B. Alte Schule Rohrsen">
+                    </div>
+                    <div class="form-group">
+                        <label for="eventDescInput">Beschreibung</label>
+                        <textarea id="eventDescInput" placeholder="Zusätzliche Hinweise für Mitglieder und Besucher..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModals()">Abbrechen</button>
+                    <button type="submit" class="btn btn-primary" id="btnSaveEvent">Speichern</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: MEMBER -->
+    <div id="modalMember" class="modal">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalMemberTitle">Mitglied anlegen</h3>
+                <button class="modal-close" onclick="closeModals()">&times;</button>
+            </div>
+            <form id="formMember">
+                <div class="modal-body">
+                    <input type="hidden" id="memberId">
+                    <div class="form-group">
+                        <label for="memberNameInput">Firmenname *</label>
+                        <input type="text" id="memberNameInput" required placeholder="Z. B. Mustermann Haustechnik GmbH">
+                    </div>
+                    <div class="form-group">
+                        <label for="memberAddressInput">Adresse</label>
+                        <textarea id="memberAddressInput" style="min-height: 60px;" placeholder="Straße 1&#10;31622 Heemsen"></textarea>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                        <div class="form-group">
+                            <label for="memberPhoneInput">Telefon</label>
+                            <input type="text" id="memberPhoneInput" placeholder="05024 12345">
+                        </div>
+                        <div class="form-group">
+                            <label for="memberMobileInput">Mobil</label>
+                            <input type="text" id="memberMobileInput" placeholder="0171 1234567">
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                        <div class="form-group">
+                            <label for="memberEmailInput">E-Mail</label>
+                            <input type="email" id="memberEmailInput" placeholder="info@betrieb.de">
+                        </div>
+                        <div class="form-group">
+                            <label for="memberWebsiteInput">Website</label>
+                            <input type="text" id="memberWebsiteInput" placeholder="https://www.betrieb.de">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="memberTagsInput">Tags / Gewerke</label>
+                        <span class="help-text">Kommagetrennt (z. B. Handwerk, Sanitär, Heizung)</span>
+                        <input type="text" id="memberTagsInput" placeholder="Heizung, Sanitär, Notdienst">
+                    </div>
+                    <div class="form-group">
+                        <label>Logo des Unternehmens</label>
+                        <div class="dropzone" onclick="document.getElementById('memberLogoInput').click()">
+                            <i class="fa-solid fa-image"></i>
+                            <div style="font-weight: 600; font-size: 13px;">Logo auswählen</div>
+                            <span class="help-text">Transparenter Hintergrund empfohlen</span>
+                            <input type="file" id="memberLogoInput" accept="image/*" style="display: none;" onchange="handleMemberLogoSelect(event)">
+                        </div>
+                        <div id="memberLogoPreview" style="margin-top: 10px;"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModals()">Abbrechen</button>
+                    <button type="submit" class="btn btn-primary" id="btnSaveMember">Speichern</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+        // State
+        let allNews = [];
+        let allEvents = [];
+        let allMembers = [];
+        let currentNewsImages = [];
+        let currentMemberLogo = '';
+
+        // Weymann SHA-256 Fallback
+        const EXPECTED_HASH = '8dc20e6c85e3edff12c7aacfe1dd6a8d01fdde1a5273a9c8635b0ae90a638484';
+
+        // Init
+        document.addEventListener('DOMContentLoaded', () => {
+            if (sessionStorage.getItem('sf_admin_authenticated') === 'true' || document.cookie.includes('sf_admin_auth=valid')) {
+                showDashboard();
+            }
+        });
+
+        // Login Handler
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btnLogin');
+            const errEl = document.getElementById('loginError');
+            const pwdInput = document.getElementById('password');
+            const pwd = pwdInput.value;
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Prüfe...';
+            errEl.style.display = 'none';
+
+            // Get Turnstile token
+            const turnstileToken = document.querySelector('[name="cf-turnstile-response"]')?.value || '';
+
+            let success = false;
+
+            try {
+                const res = await fetch('/api/admin/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password: pwd, turnstileToken })
+                });
+                const data = await res.json();
+                if (res.ok && data.success) {
+                    success = true;
+                } else if (data.error) {
+                    errEl.innerText = data.error;
+                    errEl.style.display = 'block';
+                }
+            } catch (err) {
+                console.warn('Server auth fallback:', err);
+            }
+
+            // Client-side SHA-256 fallback if offline or local server without active secrets
+            if (!success && (!errEl.innerText || errEl.innerText.includes('Turnstile'))) {
+                const hashBuffer = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pwd));
+                const hashHex = Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+                if (hashHex === EXPECTED_HASH) {
+                    success = true;
+                }
+            }
+
+            btn.disabled = false;
+            btn.innerHTML = '<span>Anmelden</span> <i class="fa-solid fa-arrow-right"></i>';
+
+            if (success) {
+                sessionStorage.setItem('sf_admin_authenticated', 'true');
+                showDashboard();
+            } else {
+                if (!errEl.style.display || errEl.style.display === 'none') {
+                    errEl.innerText = 'Ungültiges Passwort. Bitte überprüfen Sie Ihre Eingabe.';
+                    errEl.style.display = 'block';
+                }
+                pwdInput.value = '';
+                pwdInput.focus();
+            }
+        });
+
+        function showDashboard() {
+            document.getElementById('lockscreen').style.display = 'none';
+            document.getElementById('adminApp').style.display = 'block';
+            loadAllData();
+        }
+
+        async function logout() {
+            sessionStorage.removeItem('sf_admin_authenticated');
+            try { await fetch('/api/admin/logout'); } catch (_) {}
+            location.reload();
+        }
+
+        function showToast(msg, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.className = `toast show ${type === 'success' ? 'toast-success' : 'toast-error'}`;
+            setTimeout(() => { toast.classList.remove('show'); }, 3500);
+        }
+
+        // Tab Navigation
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelector(`button[onclick="switchTab('${tabId}')"]`).classList.add('active');
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+        }
+
+        function closeModals() {
+            document.querySelectorAll('.modal').forEach(m => m.classList.remove('active'));
+        }
+
+        // DATA LOADING
+        async function loadAllData() {
+            loadNews();
+            loadEvents();
+            loadMembers();
+        }
+
+        // --- 1. NEWS TAB ---
+        async function loadNews() {
+            const tbody = document.getElementById('newsTableBody');
+            const countEl = document.getElementById('newsCount');
+            try {
+                const res = await fetch('/api/news');
+                allNews = await res.json();
+                countEl.innerText = `(${allNews.length})`;
+                renderNewsTable();
+            } catch (e) {
+                tbody.innerHTML = '<tr><td colspan="5" style="color:red; text-align:center;">Fehler beim Laden der Beiträge.</td></tr>';
+            }
+        }
+
+        function renderNewsTable() {
+            const tbody = document.getElementById('newsTableBody');
+            tbody.innerHTML = '';
+            if (allNews.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color: var(--text-muted); padding: 30px;">Noch keine Beiträge vorhanden.</td></tr>';
+                return;
+            }
+            allNews.forEach(item => {
+                const img = item.images && item.images.length > 0 ? item.images[0] : 'https://pub-b33108412309406a9a941ddc51e9a5b9.r2.dev/gewerbeverein%20heemsen/Gewerbeverein-Heemsen-Logo.png';
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><img src="${img}" class="item-thumb" alt="Thumbnail"></td>
+                    <td style="font-weight: 500; font-size: 13px;">${item.date || '-'}</td>
+                    <td style="font-weight: 600;">${escapeHtml(item.title)}</td>
+                    <td style="color: var(--text-muted); max-width: 320px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(item.excerpt || '')}</td>
+                    <td style="text-align: right;">
+                        <button class="btn btn-secondary btn-sm" onclick="editNews('${item.id}')"><i class="fa-solid fa-pen"></i></button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteNews('${item.id}')"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function openNewsModal(item = null) {
+            document.getElementById('modalNews').classList.add('active');
+            const form = document.getElementById('formNews');
+            form.reset();
+            currentNewsImages = [];
+
+            if (item) {
+                document.getElementById('modalNewsTitle').innerText = 'Beitrag bearbeiten';
+                document.getElementById('newsId').value = item.id;
+                document.getElementById('newsTitleInput').value = item.title;
+                document.getElementById('newsDateInput').value = item.date;
+                document.getElementById('newsExcerptInput').value = item.excerpt || '';
+                document.getElementById('newsContentInput').value = item.content || '';
+                currentNewsImages = Array.isArray(item.images) ? [...item.images] : [];
+            } else {
+                document.getElementById('modalNewsTitle').innerText = 'Neuer Beitrag';
+                document.getElementById('newsId').value = '';
+                const today = new Date();
+                document.getElementById('newsDateInput').value = `${String(today.getDate()).padStart(2, '0')}.${String(today.getMonth() + 1).padStart(2, '0')}.${today.getFullYear()}`;
+            }
+            renderNewsPreviews();
+        }
+
+        function editNews(id) {
+            const item = allNews.find(n => n.id === id);
+            if (item) openNewsModal(item);
+        }
+
+        async function deleteNews(id) {
+            if (!confirm('Diesen Beitrag wirklich löschen?')) return;
+            try {
+                const res = await fetch(`/api/news/${id}`, { method: 'DELETE' });
+                if (res.ok) {
+                    showToast('Beitrag erfolgreich gelöscht');
+                    loadNews();
+                } else {
+                    showToast('Fehler beim Löschen', 'error');
+                }
+            } catch (e) {
+                showToast('Verbindungsfehler', 'error');
+            }
+        }
+
+        async function handleNewsImageSelect(e) {
+            const files = Array.from(e.target.files);
+            for (const file of files) {
+                const fd = new FormData();
+                fd.append('file', file);
+                fd.append('folder', 'aktuelles');
+                try {
+                    const res = await fetch('/api/upload', { method: 'POST', body: fd });
+                    const data = await res.json();
+                    if (data.success && data.url) {
+                        currentNewsImages.push(data.url);
+                        renderNewsPreviews();
+                    } else {
+                        showToast(data.error || 'Upload fehlgeschlagen', 'error');
+                    }
+                } catch (err) {
+                    showToast('Upload-Fehler', 'error');
+                }
+            }
+            e.target.value = '';
+        }
+
+        function removeNewsImage(idx) {
+            currentNewsImages.splice(idx, 1);
+            renderNewsPreviews();
+        }
+
+        function renderNewsPreviews() {
+            const grid = document.getElementById('newsPreviewGrid');
+            grid.innerHTML = '';
+            currentNewsImages.forEach((url, idx) => {
+                grid.innerHTML += `
+                    <div class="preview-box">
+                        <img src="${url}">
+                        <button type="button" onclick="removeNewsImage(${idx})">&times;</button>
+                    </div>
+                `;
+            });
+        }
+
+        document.getElementById('formNews').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btnSaveNews');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Speichere...';
+
+            const payload = {
+                id: document.getElementById('newsId').value || undefined,
+                title: document.getElementById('newsTitleInput').value.trim(),
+                date: document.getElementById('newsDateInput').value.trim(),
+                excerpt: document.getElementById('newsExcerptInput').value.trim(),
+                content: document.getElementById('newsContentInput').value.trim(),
+                images: currentNewsImages
+            };
+
+            try {
+                const res = await fetch('/api/news', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (res.ok) {
+                    showToast('Beitrag erfolgreich gespeichert');
+                    closeModals();
+                    loadNews();
+                } else {
+                    showToast('Fehler beim Speichern', 'error');
+                }
+            } catch (err) {
+                showToast('Verbindungsfehler', 'error');
+            }
+
+            btn.disabled = false;
+            btn.innerText = 'Speichern';
+        });
+
+        // --- 2. EVENTS TAB ---
+        async function loadEvents() {
+            const tbody = document.getElementById('eventsTableBody');
+            const countEl = document.getElementById('eventsCount');
+            try {
+                const res = await fetch('/api/events');
+                allEvents = await res.json();
+                allEvents.sort((a, b) => new Date(b.date) - new Date(a.date));
+                countEl.innerText = `(${allEvents.length})`;
+                renderEventsTable();
+            } catch (e) {
+                tbody.innerHTML = '<tr><td colspan="4" style="color:red; text-align:center;">Fehler beim Laden der Termine.</td></tr>';
+            }
+        }
+
+        function renderEventsTable() {
+            const tbody = document.getElementById('eventsTableBody');
+            tbody.innerHTML = '';
+            if (allEvents.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color: var(--text-muted); padding: 30px;">Noch keine Termine eingetragen.</td></tr>';
+                return;
+            }
+            allEvents.forEach(item => {
+                const formattedDate = item.date ? new Date(item.date).toLocaleDateString('de-DE') : '-';
+                const timeStr = item.time ? ` ${item.time} Uhr` : '';
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="font-weight: 600; font-size: 13px;">${formattedDate}${timeStr}</td>
+                    <td>
+                        <div style="font-weight: 600;">${escapeHtml(item.title)}</div>
+                        <small style="color: var(--text-muted);">${escapeHtml(item.description ? item.description.slice(0, 80) : '')}...</small>
+                    </td>
+                    <td><i class="fa-solid fa-location-dot" style="color:var(--primary); margin-right:4px;"></i> ${escapeHtml(item.location || '-')}</td>
+                    <td style="text-align: right;">
+                        <button class="btn btn-secondary btn-sm" onclick="editEvent('${item.id}')"><i class="fa-solid fa-pen"></i></button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteEvent('${item.id}')"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function openEventModal(item = null) {
+            document.getElementById('modalEvent').classList.add('active');
+            const form = document.getElementById('formEvent');
+            form.reset();
+
+            if (item) {
+                document.getElementById('modalEventTitle').innerText = 'Termin bearbeiten';
+                document.getElementById('eventId').value = item.id;
+                document.getElementById('eventTitleInput').value = item.title;
+                document.getElementById('eventDateInput').value = item.date;
+                document.getElementById('eventTimeInput').value = item.time || '';
+                document.getElementById('eventLocationInput').value = item.location;
+                document.getElementById('eventDescInput').value = item.description || '';
+            } else {
+                document.getElementById('modalEventTitle').innerText = 'Neuer Termin';
+                document.getElementById('eventId').value = '';
+            }
+        }
+
+        function editEvent(id) {
+            const item = allEvents.find(e => e.id === id);
+            if (item) openEventModal(item);
+        }
+
+        async function deleteEvent(id) {
+            if (!confirm('Diesen Termin wirklich löschen?')) return;
+            try {
+                const res = await fetch(`/api/events/${id}`, { method: 'DELETE' });
+                if (res.ok) {
+                    showToast('Termin erfolgreich gelöscht');
+                    loadEvents();
+                } else {
+                    showToast('Fehler beim Löschen', 'error');
+                }
+            } catch (e) {
+                showToast('Verbindungsfehler', 'error');
+            }
+        }
+
+        document.getElementById('formEvent').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btnSaveEvent');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Speichere...';
+
+            const payload = {
+                id: document.getElementById('eventId').value || undefined,
+                title: document.getElementById('eventTitleInput').value.trim(),
+                date: document.getElementById('eventDateInput').value,
+                time: document.getElementById('eventTimeInput').value,
+                location: document.getElementById('eventLocationInput').value.trim(),
+                description: document.getElementById('eventDescInput').value.trim()
+            };
+
+            try {
+                const res = await fetch('/api/events', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (res.ok) {
+                    showToast('Termin erfolgreich gespeichert');
+                    closeModals();
+                    loadEvents();
+                } else {
+                    showToast('Fehler beim Speichern', 'error');
+                }
+            } catch (err) {
+                showToast('Verbindungsfehler', 'error');
+            }
+
+            btn.disabled = false;
+            btn.innerText = 'Speichern';
+        });
+
+        // --- 3. MEMBERS TAB ---
+        async function loadMembers() {
+            const tbody = document.getElementById('membersTableBody');
+            const countEl = document.getElementById('membersCount');
+            try {
+                const res = await fetch('/api/members');
+                allMembers = await res.json();
+                allMembers.sort((a, b) => a.name.localeCompare(b.name));
+                countEl.innerText = `(${allMembers.length})`;
+                renderMembersTable(allMembers);
+            } catch (e) {
+                tbody.innerHTML = '<tr><td colspan="5" style="color:red; text-align:center;">Fehler beim Laden der Mitglieder.</td></tr>';
+            }
+        }
+
+        function renderMembersTable(list) {
+            const tbody = document.getElementById('membersTableBody');
+            tbody.innerHTML = '';
+            if (list.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color: var(--text-muted); padding: 30px;">Keine Mitglieder gefunden.</td></tr>';
+                return;
+            }
+            list.forEach(m => {
+                const logo = m.logo || 'https://pub-b33108412309406a9a941ddc51e9a5b9.r2.dev/gewerbeverein%20heemsen/Gewerbeverein-Heemsen-Logo.png';
+                const tagsHtml = (m.tags || []).map(t => `<span class="badge">${escapeHtml(t)}</span>`).join(' ');
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><img src="${logo}" class="item-thumb" style="object-fit: contain; background: #fff;" alt="Logo"></td>
+                    <td>
+                        <div style="font-weight: 700;">${escapeHtml(m.name)}</div>
+                        <small style="color: var(--text-muted);">${escapeHtml((m.address || '').replace(/(\r\n|\n|\\n)/g, ', '))}</small>
+                    </td>
+                    <td style="font-size: 13px;">
+                        ${m.phone ? `<div><i class="fa-solid fa-phone" style="width: 16px; color: var(--text-muted);"></i> ${escapeHtml(m.phone)}</div>` : ''}
+                        ${m.email ? `<div><i class="fa-solid fa-envelope" style="width: 16px; color: var(--text-muted);"></i> ${escapeHtml(m.email)}</div>` : ''}
+                    </td>
+                    <td><div style="display:flex; flex-wrap:wrap; gap:4px;">${tagsHtml || '-'}</div></td>
+                    <td style="text-align: right;">
+                        <button class="btn btn-secondary btn-sm" onclick="editMember('${m.id}')"><i class="fa-solid fa-pen"></i></button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteMember('${m.id}')"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        document.getElementById('memberSearch').addEventListener('input', (e) => {
+            const q = e.target.value.toLowerCase();
+            const filtered = allMembers.filter(m => {
+                const nameMatch = (m.name || '').toLowerCase().includes(q);
+                const tagMatch = (m.tags || []).some(t => t.toLowerCase().includes(q));
+                return nameMatch || tagMatch;
+            });
+            renderMembersTable(filtered);
+        });
+
+        function openMemberModal(item = null) {
+            document.getElementById('modalMember').classList.add('active');
+            const form = document.getElementById('formMember');
+            form.reset();
+            currentMemberLogo = '';
+            document.getElementById('memberLogoPreview').innerHTML = '';
+
+            if (item) {
+                document.getElementById('modalMemberTitle').innerText = 'Mitglied bearbeiten';
+                document.getElementById('memberId').value = item.id;
+                document.getElementById('memberNameInput').value = item.name;
+                document.getElementById('memberAddressInput').value = item.address || '';
+                document.getElementById('memberPhoneInput').value = item.phone || '';
+                document.getElementById('memberMobileInput').value = item.mobile || '';
+                document.getElementById('memberEmailInput').value = item.email || '';
+                document.getElementById('memberWebsiteInput').value = item.website || '';
+                document.getElementById('memberTagsInput').value = Array.isArray(item.tags) ? item.tags.join(', ') : (item.tags || '');
+                currentMemberLogo = item.logo || '';
+                if (currentMemberLogo) {
+                    document.getElementById('memberLogoPreview').innerHTML = `<img src="${currentMemberLogo}" style="height: 48px; max-width: 120px; object-fit: contain; border: 1px solid var(--border); border-radius: 6px; padding: 4px;">`;
+                }
+            } else {
+                document.getElementById('modalMemberTitle').innerText = 'Neues Mitglied anlegen';
+                document.getElementById('memberId').value = '';
+            }
+        }
+
+        function editMember(id) {
+            const item = allMembers.find(m => m.id === id);
+            if (item) openMemberModal(item);
+        }
+
+        async function deleteMember(id) {
+            if (!confirm('Dieses Mitglied wirklich löschen?')) return;
+            try {
+                const res = await fetch(`/api/members/${id}`, { method: 'DELETE' });
+                if (res.ok) {
+                    showToast('Mitglied erfolgreich gelöscht');
+                    loadMembers();
+                } else {
+                    showToast('Fehler beim Löschen', 'error');
+                }
+            } catch (e) {
+                showToast('Verbindungsfehler', 'error');
+            }
+        }
+
+        async function handleMemberLogoSelect(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const fd = new FormData();
+            fd.append('file', file);
+            fd.append('folder', 'mitglieder');
+            try {
+                const res = await fetch('/api/upload', { method: 'POST', body: fd });
+                const data = await res.json();
+                if (data.success && data.url) {
+                    currentMemberLogo = data.url;
+                    document.getElementById('memberLogoPreview').innerHTML = `<img src="${currentMemberLogo}" style="height: 48px; max-width: 120px; object-fit: contain; border: 1px solid var(--border); border-radius: 6px; padding: 4px;">`;
+                    showToast('Logo hochgeladen');
+                } else {
+                    showToast(data.error || 'Upload fehlgeschlagen', 'error');
+                }
+            } catch (err) {
+                showToast('Upload-Fehler', 'error');
+            }
+            e.target.value = '';
+        }
+
+        document.getElementById('formMember').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btnSaveMember');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Speichere...';
+
+            const rawTags = document.getElementById('memberTagsInput').value;
+            const tags = rawTags.split(',').map(t => t.trim()).filter(Boolean);
+
+            const payload = {
+                id: document.getElementById('memberId').value || undefined,
+                name: document.getElementById('memberNameInput').value.trim(),
+                address: document.getElementById('memberAddressInput').value.trim(),
+                phone: document.getElementById('memberPhoneInput').value.trim(),
+                mobile: document.getElementById('memberMobileInput').value.trim(),
+                email: document.getElementById('memberEmailInput').value.trim(),
+                website: document.getElementById('memberWebsiteInput').value.trim(),
+                tags,
+                logo: currentMemberLogo
+            };
+
+            try {
+                const res = await fetch('/api/members', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (res.ok) {
+                    showToast('Mitglied erfolgreich gespeichert');
+                    closeModals();
+                    loadMembers();
+                } else {
+                    showToast('Fehler beim Speichern', 'error');
+                }
+            } catch (err) {
+                showToast('Verbindungsfehler', 'error');
+            }
+
+            btn.disabled = false;
+            btn.innerText = 'Speichern';
+        });
+
+        // Helpers
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+    </script>
+</body>
+</html>

@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     let allMembers = [];
 
     try {
-        const res = await fetch('https://gewerbeverin-heemsen-backend.friese-scholz.workers.dev/api/members');
+        const res = await fetch('/api/members');
         allMembers = await res.json();
         
         // Sort alphabetically by name

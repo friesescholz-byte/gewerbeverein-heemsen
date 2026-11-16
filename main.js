@@ -15,25 +15,45 @@ document.addEventListener('DOMContentLoaded', () => {
     const navMenu = document.getElementById('nav-menu');
     const navLinks = document.querySelectorAll('.nav-link');
 
+    function closeMobileMenu() {
+        hamburger.classList.remove('active');
+        hamburger.setAttribute('aria-expanded', 'false');
+        navMenu.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+
+    hamburger.setAttribute('aria-expanded', 'false');
     hamburger.addEventListener('click', () => {
-        hamburger.classList.toggle('active');
+        const isActive = hamburger.classList.toggle('active');
+        hamburger.setAttribute('aria-expanded', isActive ? 'true' : 'false');
         navMenu.classList.toggle('active');
-        
-        // Prevent body scrolling when menu is open
-        if (navMenu.classList.contains('active')) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = 'auto';
+        document.body.style.overflow = isActive ? 'hidden' : 'auto';
+    });
+
+    // Close mobile menu when clicking any link inside nav-menu
+    navMenu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', closeMobileMenu);
+    });
+
+    // Close mobile menu when tapping outside
+    document.addEventListener('click', (e) => {
+        if (navMenu.classList.contains('active') && !navMenu.contains(e.target) && !hamburger.contains(e.target)) {
+            closeMobileMenu();
         }
     });
 
-    // Close mobile menu when a link is clicked
-    navLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            hamburger.classList.remove('active');
-            navMenu.classList.remove('active');
-            document.body.style.overflow = 'auto';
-        });
+    // ESC key accessibility: Closes mobile menu or open modal
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            if (navMenu.classList.contains('active')) {
+                closeMobileMenu();
+            }
+            const modal = document.getElementById('news-modal');
+            if (modal && modal.classList.contains('active')) {
+                modal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        }
     });
 
     // Add active class to nav links on scroll (Only on Homepage)
@@ -183,8 +203,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     if (!homeContainer && !pageContainer) return;
 
+    // Helper: Truncate excerpt cleanly at word boundary with ellipsis
+    function formatExcerpt(text, maxLength = 130) {
+        if (!text) return '';
+        const clean = text.replace(/<[^>]*>/g, '').trim();
+        if (clean.length <= maxLength) return clean;
+        const truncated = clean.substring(0, maxLength);
+        const lastSpace = truncated.lastIndexOf(' ');
+        const cut = (lastSpace > 60) ? truncated.substring(0, lastSpace) : truncated;
+        return cut.replace(/[\s,.;:!?]+$/, '') + '...';
+    }
+
     try {
-        const res = await fetch('https://gewerbeverin-heemsen-backend.friese-scholz.workers.dev/api/news');
+        const res = await fetch('/api/news');
         const posts = await res.json();
 
         // --- Render Homepage (Max 2) ---
@@ -203,7 +234,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <div class="news-content">
                         <span class="news-date">${post.date}</span>
                         <h4 class="news-title">${post.title}</h4>
-                        <p class="news-excerpt">${post.excerpt}</p>
+                        <p class="news-excerpt">${formatExcerpt(post.excerpt, 110)}</p>
                         <a href="aktuelles.html" class="text-link">Weiterlesen <i class="fa-solid fa-arrow-right"></i></a>
                     </div>
                 `;
@@ -274,11 +305,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                     `;
 
                     card.innerHTML = `
-                        <div class="news-card-img" style="background-image: url('${imgUrl}');"></div>
+                        <div class="news-card-img" style="background-image: url('${imgUrl}');" title="Beitrag ansehen"></div>
                         <div class="news-card-content">
                             <span class="news-date">${post.date}</span>
                             <h2 class="news-title">${post.title}</h2>
-                            <p class="news-excerpt">${post.excerpt}</p>
+                            <p class="news-excerpt">${formatExcerpt(post.excerpt, 130)}</p>
                             <button class="btn btn-primary open-modal-btn">Vollständigen Beitrag lesen</button>
                         </div>
                     `;
@@ -337,7 +368,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 function bindModalEventsToNewCards() {
-    const openButtons = document.querySelectorAll('.open-modal-btn');
+    const cards = document.querySelectorAll('.news-card-large');
     const modalOverlay = document.getElementById('news-modal');
     if (!modalOverlay) return;
 
@@ -345,37 +376,56 @@ function bindModalEventsToNewCards() {
     const modalTitle = document.getElementById('modal-title');
     const modalBody = document.getElementById('modal-body');
 
-    openButtons.forEach(btn => {
-        if (btn.classList.contains('bound')) return;
-        btn.classList.add('bound');
+    function openModalForCard(card) {
+        if (!card) return;
+        const date = card.querySelector('.news-date')?.textContent || '';
+        const title = card.querySelector('.news-title')?.textContent || '';
+        const fullContentHtml = card.querySelector('.news-full-content')?.innerHTML || '';
         
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            const card = this.closest('.news-card-large');
-            if (!card) return;
+        let images = [];
+        try {
+            const imagesData = card.querySelector('.news-images-data')?.getAttribute('data-images');
+            if (imagesData) images = JSON.parse(imagesData);
+        } catch (e) {
+            console.error("Could not parse images data", e);
+        }
 
-            const date = card.querySelector('.news-date').textContent;
-            const title = card.querySelector('.news-title').textContent;
-            const fullContentHtml = card.querySelector('.news-full-content').innerHTML;
-            
-            let images = [];
-            try {
-                const imagesData = card.querySelector('.news-images-data').getAttribute('data-images');
-                images = JSON.parse(imagesData);
-            } catch (e) {
-                console.error("Could not parse images data", e);
+        modalDate.textContent = date;
+        modalTitle.textContent = title;
+        modalBody.innerHTML = fullContentHtml;
+
+        if (typeof window.setupSlider === 'function') {
+            window.setupSlider(images);
+        }
+
+        modalOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    cards.forEach(card => {
+        if (card.classList.contains('bound')) return;
+        card.classList.add('bound');
+
+        // Bind button
+        const btn = card.querySelector('.open-modal-btn');
+        if (btn) {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                openModalForCard(card);
+            });
+        }
+
+        // Bind image and title as clickable triggers
+        const img = card.querySelector('.news-card-img');
+        const title = card.querySelector('.news-title');
+        [img, title].forEach(trigger => {
+            if (trigger) {
+                trigger.style.cursor = 'pointer';
+                trigger.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    openModalForCard(card);
+                });
             }
-
-            modalDate.textContent = date;
-            modalTitle.textContent = title;
-            modalBody.innerHTML = fullContentHtml;
-
-            if (typeof window.setupSlider === 'function') {
-                window.setupSlider(images);
-            }
-
-            modalOverlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
         });
     });
 }
@@ -388,7 +438,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!homeEventsContainer && !pageEventsContainer) return;
 
     try {
-        const res = await fetch('https://gewerbeverin-heemsen-backend.friese-scholz.workers.dev/api/events');
+        const res = await fetch('/api/events');
         let events = await res.json();
 
         // Datum filtern und sortieren (nur zukünftige, nächste zuerst)
@@ -527,7 +577,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     let allMembers = [];
 
     try {
-        const res = await fetch('https://gewerbeverin-heemsen-backend.friese-scholz.workers.dev/api/members');
+        const res = await fetch('/api/members');
         allMembers = await res.json();
         
         // Sort alphabetically by name
@@ -552,6 +602,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         membersPageContainer.innerHTML = '<div style="grid-column: 1 / -1; text-align:center; padding: 40px; color: red;">Fehler beim Laden der Mitglieder.</div>';
     }
 
+    function escapeMemberHtml(str) {
+        if (!str) return '';
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
+
     function renderMembers(members) {
         membersPageContainer.innerHTML = '';
         if (members.length === 0) {
@@ -567,23 +626,28 @@ document.addEventListener('DOMContentLoaded', async () => {
             let detailsHtml = '';
             
             if (m.address) {
-                detailsHtml += `<div class="member-detail-item"><i class="fa-solid fa-location-dot"></i> <span>${m.address.replace(/\\n/g, '<br>')}</span></div>`;
+                const formattedAddr = escapeMemberHtml(m.address).replace(/(\r\n|\n|\\n)/g, '<br>');
+                detailsHtml += `<div class="member-detail-item"><i class="fa-solid fa-location-dot"></i> <span>${formattedAddr}</span></div>`;
             }
             if (m.phone) {
-                detailsHtml += `<div class="member-detail-item"><i class="fa-solid fa-phone"></i> <span>${m.phone}</span></div>`;
+                const telClean = m.phone.replace(/[^0-9+]/g, '');
+                detailsHtml += `<div class="member-detail-item"><i class="fa-solid fa-phone"></i> <a href="tel:${telClean}">${escapeMemberHtml(m.phone)}</a></div>`;
             }
             if (m.fax) {
-                detailsHtml += `<div class="member-detail-item"><i class="fa-solid fa-fax"></i> <span>${m.fax}</span></div>`;
+                detailsHtml += `<div class="member-detail-item"><i class="fa-solid fa-fax"></i> <span>${escapeMemberHtml(m.fax)}</span></div>`;
             }
             if (m.mobile) {
-                detailsHtml += `<div class="member-detail-item"><i class="fa-solid fa-mobile-screen"></i> <span>${m.mobile}</span></div>`;
+                const mobClean = m.mobile.replace(/[^0-9+]/g, '');
+                detailsHtml += `<div class="member-detail-item"><i class="fa-solid fa-mobile-screen"></i> <a href="tel:${mobClean}">${escapeMemberHtml(m.mobile)}</a></div>`;
             }
             if (m.email) {
-                detailsHtml += `<div class="member-detail-item"><i class="fa-solid fa-envelope"></i> <a href="mailto:${m.email}">${m.email}</a></div>`;
+                const cleanEmail = escapeMemberHtml(m.email);
+                detailsHtml += `<div class="member-detail-item"><i class="fa-solid fa-envelope"></i> <a href="mailto:${cleanEmail}">${cleanEmail}</a></div>`;
             }
             if (m.website) {
-                const cleanUrl = m.website.replace(/^https?:\/\//i, '');
-                detailsHtml += `<div class="member-detail-item"><i class="fa-solid fa-globe"></i> <a href="${m.website}" target="_blank" rel="noopener noreferrer">${cleanUrl}</a></div>`;
+                let cleanUrl = m.website.replace(/^https?:\/\//i, '').replace(/\/$/, '');
+                let fullUrl = m.website.startsWith('http') ? m.website : 'https://' + m.website;
+                detailsHtml += `<div class="member-detail-item"><i class="fa-solid fa-globe"></i> <a href="${escapeMemberHtml(fullUrl)}" target="_blank" rel="noopener noreferrer">${escapeMemberHtml(cleanUrl)}</a></div>`;
             }
 
             // Generate tags HTML
@@ -591,7 +655,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (m.tags && m.tags.length > 0) {
                 tagsHtml = '<div class="member-tags">';
                 m.tags.forEach(tag => {
-                    tagsHtml += `<span class="member-tag">${tag}</span>`;
+                    tagsHtml += `<span class="member-tag">${escapeMemberHtml(tag)}</span>`;
                 });
                 tagsHtml += '</div>';
             }
@@ -601,9 +665,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             article.innerHTML = `
                 <div class="member-logo-wrapper">
-                    <img src="${logoUrl}" alt="Logo von ${m.name}">
+                    <img src="${logoUrl}" alt="Logo von ${escapeMemberHtml(m.name)}" loading="lazy">
                 </div>
-                <h3 class="member-name">${m.name}</h3>
+                <h3 class="member-name">${escapeMemberHtml(m.name)}</h3>
                 <div class="member-details">
                     ${detailsHtml}
                 </div>
