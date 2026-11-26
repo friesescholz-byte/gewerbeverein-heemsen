@@ -166,13 +166,195 @@ export default {
       }
     }
 
+    // 4. PUBLIC APPLICATION SUBMISSION (GAFA & MITGLIEDSCHAFT)
+    if (url.pathname === '/api/submit-application' && method === 'POST') {
+      try {
+        const fd = await request.formData();
+        const type = (fd.get('type') || 'mitgliedschaft').toString().trim();
+        const name = (fd.get('name') || '').toString().trim();
+        const company = (fd.get('company') || '').toString().trim();
+        const email = (fd.get('email') || '').toString().trim();
+        const file = fd.get('file') || fd.get('application-file');
+        const turnstileToken = (fd.get('cf-turnstile-response') || fd.get('turnstileToken') || '').toString().trim();
+
+        const turnstileSecret = env.TURNSTILE_SECRET_KEY;
+        const clientIp = request.headers.get('CF-Connecting-IP');
+
+        if (turnstileSecret) {
+          if (!turnstileToken) {
+            return new Response(JSON.stringify({
+              success: false,
+              error: 'Bitte bestätigen Sie die Sicherheitsprüfung (Cloudflare Turnstile).'
+            }), { status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders } });
+          }
+          const isValidTurnstile = await verifyTurnstile(turnstileToken, turnstileSecret, clientIp);
+          if (!isValidTurnstile) {
+            return new Response(JSON.stringify({
+              success: false,
+              error: 'Sicherheitsprüfung (Cloudflare Turnstile) fehlgeschlagen. Bitte laden Sie die Seite neu.'
+            }), { status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders } });
+          }
+        }
+
+        if (!name || !email) {
+          return new Response(JSON.stringify({
+            success: false,
+            error: 'Bitte füllen Sie alle Pflichtfelder (Name und E-Mail) aus.'
+          }), { status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders } });
+        }
+
+        if (!file || typeof file === 'string' || file.size === 0) {
+          return new Response(JSON.stringify({
+            success: false,
+            error: 'Bitte laden Sie Ihren ausgefüllten Antrag (PDF, JPG oder PNG) hoch.'
+          }), { status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders } });
+        }
+
+        if (file.size > 10 * 1024 * 1024) {
+          return new Response(JSON.stringify({
+            success: false,
+            error: 'Die Datei darf maximal 10 MB groß sein.'
+          }), { status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders } });
+        }
+
+        const appId = Date.now().toString();
+        const cleanFileName = (file.name || 'antrag.pdf').replace(/[^a-zA-Z0-9._-]/g, '_');
+        const r2Key = `gewerbeverein heemsen/antraege/${appId}_${cleanFileName}`;
+        const fileBuffer = await file.arrayBuffer();
+
+        await env.BUCKET.put(r2Key, fileBuffer, {
+          httpMetadata: { contentType: file.type || 'application/pdf' }
+        });
+
+        const fileUrl = `https://pub-b33108412309406a9a941ddc51e9a5b9.r2.dev/${r2Key.split('/').map(encodeURIComponent).join('/')}`;
+
+        const record = {
+          id: appId,
+          type: type === 'gafa' ? 'GAFA-Anmeldung' : 'Mitgliedsantrag',
+          name,
+          company,
+          email,
+          fileName: cleanFileName,
+          fileUrl,
+          submittedAt: new Date().toISOString(),
+          status: 'neu'
+        };
+
+        let applications = [];
+        try {
+          const existingObj = await env.BUCKET.get('gewerbeverein heemsen/applications_data.json');
+          if (existingObj) applications = JSON.parse(await existingObj.text());
+        } catch (_) {}
+
+        applications.unshift(record);
+        await env.BUCKET.put('gewerbeverein heemsen/applications_data.json', JSON.stringify(applications, null, 2), {
+          httpMetadata: { contentType: 'application/json' }
+        });
+
+        // Optional: Send email via Resend if configured
+        if (env.RESEND_API_KEY) {
+          try {
+            const bytes = new Uint8Array(fileBuffer);
+            let binary = '';
+            const chunkSize = 0x8000;
+            for (let i = 0; i < bytes.length; i += chunkSize) {
+              binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunkSize));
+            }
+            const base64Content = btoa(binary);
+
+            const esc = (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            const toEmail = env.CONTACT_EMAIL || 'info@gewerbeverein-heemsen.de';
+
+            await fetch('https://api.resend.com/emails', {
+              method: 'POST',
+              headers: {
+                'Authorization': `Bearer ${env.RESEND_API_KEY}`,
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                from: 'Scholz & Friese Webdesign <noreply@scholz-friese-webdesign.de>',
+                to: [toEmail],
+                reply_to: email,
+                subject: `[Gewerbeverein Heemsen] Neue ${record.type} von ${name}`,
+                html: `
+                  <h2>Neue ${esc(record.type)} eingegangen</h2>
+                  <p><strong>Name:</strong> ${esc(name)}</p>
+                  <p><strong>Unternehmen:</strong> ${esc(company || '-')}</p>
+                  <p><strong>E-Mail:</strong> ${esc(email)}</p>
+                  <p><strong>Eingereichte Datei:</strong> <a href="${fileUrl}">${esc(cleanFileName)}</a></p>
+                  <hr>
+                  <p style="font-size:12px;color:#666;">Diese Nachricht wurde automatisch über das Online-Formular auf gewerbeverein-heemsen.de gesendet. Der Antrag befindet sich zusätzlich im Anhang und im Admin-Dashboard.</p>
+                `,
+                attachments: [
+                  {
+                    filename: cleanFileName,
+                    content: base64Content
+                  }
+                ]
+              })
+            });
+          } catch (mailErr) {
+            console.error('Resend notification error:', mailErr);
+          }
+        }
+
+        return new Response(JSON.stringify({ success: true, item: record }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json', ...corsHeaders }
+        });
+      } catch (e) {
+        return new Response(JSON.stringify({ success: false, error: e.message }), {
+          status: 500,
+          headers: { 'Content-Type': 'application/json', ...corsHeaders }
+        });
+      }
+    }
+
     // --- PROTECTED ADMIN APIs ---
+    if (url.pathname === '/api/applications' && method === 'GET') {
+      if (!checkAuth(request)) {
+        return new Response(JSON.stringify({ success: false, error: 'Nicht autorisiert. Bitte einloggen.' }), {
+          status: 401,
+          headers: { 'Content-Type': 'application/json', ...corsHeaders }
+        });
+      }
+      try {
+        const obj = await env.BUCKET.get('gewerbeverein heemsen/applications_data.json');
+        if (!obj) return new Response(JSON.stringify([]), { headers: { 'Content-Type': 'application/json', ...corsHeaders } });
+        return new Response(obj.body, { headers: { 'Content-Type': 'application/json', ...corsHeaders } });
+      } catch (e) {
+        return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: corsHeaders });
+      }
+    }
+
     if (url.pathname.startsWith('/api/') && ['POST', 'PUT', 'DELETE'].includes(method) && !url.pathname.includes('/login')) {
       if (!checkAuth(request)) {
         return new Response(JSON.stringify({ success: false, error: 'Nicht autorisiert. Bitte einloggen.' }), {
           status: 401,
           headers: { 'Content-Type': 'application/json', ...corsHeaders }
         });
+      }
+
+      // DELETE APPLICATION (DELETE /api/applications/:id)
+      if ((url.pathname.startsWith('/api/applications/') || (url.pathname === '/api/applications' && url.searchParams.has('id'))) && method === 'DELETE') {
+        try {
+          const id = url.searchParams.get('id') || url.pathname.replace('/api/applications/', '').trim();
+          let applications = [];
+          const obj = await env.BUCKET.get('gewerbeverein heemsen/applications_data.json');
+          if (obj) applications = JSON.parse(await obj.text());
+          applications = applications.filter(a => a.id !== id);
+          await env.BUCKET.put('gewerbeverein heemsen/applications_data.json', JSON.stringify(applications, null, 2), {
+            httpMetadata: { contentType: 'application/json' }
+          });
+          return new Response(JSON.stringify({ success: true }), {
+            headers: { 'Content-Type': 'application/json', ...corsHeaders }
+          });
+        } catch (e) {
+          return new Response(JSON.stringify({ success: false, error: e.message }), {
+            status: 500,
+            headers: { 'Content-Type': 'application/json', ...corsHeaders }
+          });
+        }
       }
 
       // SAVE NEWS (POST /api/news)

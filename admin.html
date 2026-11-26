@@ -263,6 +263,9 @@
                 <button class="tab-btn" onclick="switchTab('members')">
                     <i class="fa-solid fa-users"></i> <span>Mitgliederverzeichnis</span>
                 </button>
+                <button class="tab-btn" onclick="switchTab('applications')">
+                    <i class="fa-solid fa-inbox"></i> <span>Eingegangene Anträge</span>
+                </button>
             </nav>
 
             <!-- TAB 1: NEWS -->
@@ -354,6 +357,37 @@
                             </thead>
                             <tbody id="membersTableBody">
                                 <tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 30px;">Lade Mitglieder...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 4: APPLICATIONS -->
+            <section id="tab-applications" class="tab-content">
+                <div class="panel">
+                    <div class="panel-header">
+                        <div>
+                            <span class="panel-title">Eingegangene Anträge (GAFA &amp; Mitgliedschaft)</span>
+                            <span class="panel-count" id="applicationsCount">(Lade...)</span>
+                        </div>
+                        <button class="btn btn-secondary btn-sm" onclick="loadApplications()">
+                            <i class="fa-solid fa-rotate"></i> Aktualisieren
+                        </button>
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width: 140px;">Eingang</th>
+                                    <th style="width: 140px;">Typ</th>
+                                    <th>Antragsteller</th>
+                                    <th>Dokument</th>
+                                    <th style="width: 100px; text-align: right;">Aktionen</th>
+                                </tr>
+                            </thead>
+                            <tbody id="applicationsTableBody">
+                                <tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 30px;">Lade Anträge...</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -541,14 +575,22 @@
             const pwdInput = document.getElementById('password');
             const pwd = pwdInput.value;
 
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Prüfe...';
             errEl.style.display = 'none';
+            errEl.innerText = '';
 
             // Get Turnstile token
             const turnstileToken = document.querySelector('[name="cf-turnstile-response"]')?.value || '';
+            if (!turnstileToken) {
+                errEl.innerText = 'Bitte bestätigen Sie die Sicherheitsprüfung (Cloudflare Turnstile).';
+                errEl.style.display = 'block';
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Prüfe...';
 
             let success = false;
+            let serverResponded = false;
 
             try {
                 const res = await fetch('/api/admin/login', {
@@ -556,6 +598,7 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ password: pwd, turnstileToken })
                 });
+                serverResponded = true;
                 const data = await res.json();
                 if (res.ok && data.success) {
                     success = true;
@@ -564,11 +607,11 @@
                     errEl.style.display = 'block';
                 }
             } catch (err) {
-                console.warn('Server auth fallback:', err);
+                console.warn('Server auth fallback (offline):', err);
             }
 
-            // Client-side SHA-256 fallback if offline or local server without active secrets
-            if (!success && (!errEl.innerText || errEl.innerText.includes('Turnstile'))) {
+            // Client-side SHA-256 fallback ONLY if server is unreachable (offline/static preview)
+            if (!success && !serverResponded) {
                 const hashBuffer = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pwd));
                 const hashHex = Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
                 if (hashHex === EXPECTED_HASH) {
@@ -587,6 +630,7 @@
                     errEl.innerText = 'Ungültiges Passwort. Bitte überprüfen Sie Ihre Eingabe.';
                     errEl.style.display = 'block';
                 }
+                if (window.turnstile) window.turnstile.reset();
                 pwdInput.value = '';
                 pwdInput.focus();
             }
@@ -628,6 +672,7 @@
             loadNews();
             loadEvents();
             loadMembers();
+            loadApplications();
         }
 
         // --- 1. NEWS TAB ---
@@ -1070,6 +1115,71 @@
             btn.disabled = false;
             btn.innerText = 'Speichern';
         });
+
+        // --- 4. APPLICATIONS TAB ---
+        async function loadApplications() {
+            const tbody = document.getElementById('applicationsTableBody');
+            const countEl = document.getElementById('applicationsCount');
+            if (!tbody) return;
+            try {
+                const res = await fetch('/api/applications');
+                if (!res.ok) {
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color: var(--text-muted); padding: 30px;">Bitte erneut anmelden, um Anträge einzusehen.</td></tr>';
+                    return;
+                }
+                const list = await res.json();
+                countEl.innerText = `(${list.length})`;
+                renderApplicationsTable(list);
+            } catch (e) {
+                tbody.innerHTML = '<tr><td colspan="5" style="color:red; text-align:center;">Fehler beim Laden der Anträge.</td></tr>';
+            }
+        }
+
+        function renderApplicationsTable(list) {
+            const tbody = document.getElementById('applicationsTableBody');
+            tbody.innerHTML = '';
+            if (!list || list.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color: var(--text-muted); padding: 30px;">Noch keine Online-Anträge eingegangen.</td></tr>';
+                return;
+            }
+            list.forEach(item => {
+                const dt = item.submittedAt ? new Date(item.submittedAt).toLocaleString('de-DE') : '-';
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="font-size: 13px; color: var(--text-muted);">${escapeHtml(dt)}</td>
+                    <td><span class="badge">${escapeHtml(item.type || 'Antrag')}</span></td>
+                    <td>
+                        <div style="font-weight: 700;">${escapeHtml(item.name)}</div>
+                        ${item.company ? `<small style="color: var(--text-muted); display:block;">${escapeHtml(item.company)}</small>` : ''}
+                        <small style="color: var(--primary);"><a href="mailto:${escapeHtml(item.email)}" style="color:inherit;">${escapeHtml(item.email)}</a></small>
+                    </td>
+                    <td>
+                        <a href="${escapeHtml(item.fileUrl)}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">
+                            <i class="fa-solid fa-file-arrow-down"></i> ${escapeHtml(item.fileName || 'Anhang')}
+                        </a>
+                    </td>
+                    <td style="text-align: right;">
+                        <button class="btn btn-danger btn-sm" onclick="deleteApplication('${escapeHtml(item.id)}')" title="Löschen"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        async function deleteApplication(id) {
+            if (!confirm('Diesen Antrag wirklich aus der Liste entfernen?')) return;
+            try {
+                const res = await fetch(`/api/applications/${id}`, { method: 'DELETE' });
+                if (res.ok) {
+                    showToast('Antrag entfernt');
+                    loadApplications();
+                } else {
+                    showToast('Fehler beim Löschen', 'error');
+                }
+            } catch (e) {
+                showToast('Verbindungsfehler', 'error');
+            }
+        }
 
         // Helpers
         function escapeHtml(str) {

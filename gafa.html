@@ -231,6 +231,9 @@
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="https://pub-b33108412309406a9a941ddc51e9a5b9.r2.dev/gewerbeverein%20heemsen/GH_Logo_hochaufloesend_transparent.png">
+
+    <!-- Cloudflare Turnstile -->
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body>
 
@@ -282,8 +285,8 @@
                 <div class="step-card">
                     <div class="step-number">1</div>
                     <h3 class="step-title">Herunterladen</h3>
-                    <p class="step-desc">Laden Sie sich bequem unseren offiziellen GAFA-Anmeldung als PDF-Dokument herunter.</p>
-                    <a href="#" target="_blank" rel="noopener noreferrer" class="btn btn-outline step-action"><i class="fa-solid fa-download" style="margin-right: 8px;"></i> Antrag (PDF)</a>
+                    <p class="step-desc">Laden Sie sich bequem unser offizielles GAFA-Anmeldeformular als PDF-Dokument herunter.</p>
+                    <a href="https://pub-b33108412309406a9a941ddc51e9a5b9.r2.dev/gewerbeverein%20heemsen/gafa-anmeldung.pdf" target="_blank" rel="noopener noreferrer" download="GAFA-Anmeldung-Gewerbeverein-Heemsen.pdf" class="btn btn-outline step-action"><i class="fa-solid fa-download" style="margin-right: 8px;"></i> Antrag (PDF)</a>
                 </div>
                 
                 <!-- Step 2 -->
@@ -376,17 +379,23 @@
                         </label>
                     </div>
                     
+                    <div class="form-group full-width" style="display: flex; flex-direction: column; align-items: center; margin-bottom: 10px;">
+                        <div class="cf-turnstile" data-sitekey="0x4AAAAAADVEqwJz-pyeZXi0" data-theme="light"></div>
+                    </div>
+
+                    <div id="form-error" style="display: none; grid-column: 1 / -1; background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; border-radius: 8px; padding: 12px 16px; font-size: 0.9rem; text-align: center;"></div>
+
                     <div class="form-group full-width" style="margin-top: 10px;">
                         <button type="submit" class="btn btn-primary submit-btn" id="submit-btn">
-                            Antrag zahlungspflichtig absenden <i class="fa-regular fa-paper-plane" style="margin-left: 8px;"></i>
+                            GAFA-Anmeldung absenden <i class="fa-regular fa-paper-plane" style="margin-left: 8px;"></i>
                         </button>
                     </div>
                 </form>
 
                 <div class="success-message" id="success-message">
                     <i class="fa-solid fa-circle-check"></i>
-                    <h4>Vielen Dank für Ihren Antrag!</h4>
-                    <p>Wir haben Ihre Unterlagen erfolgreich erhalten. Der Vorstand wird sich in Kürze mit Ihnen in Verbindung setzen.</p>
+                    <h4>Vielen Dank für Ihre GAFA-Anmeldung!</h4>
+                    <p>Wir haben Ihre Unterlagen erfolgreich erhalten. Das Organisationsteam wird sich in Kürze mit Ihnen in Verbindung setzen.</p>
                 </div>
                 
             </div>
@@ -435,18 +444,7 @@
     </footer>
 
     <!-- Scripts -->
-    <script src="main.js">
-        // Gallery Load More Logic
-        function loadMoreImages() {
-            const hiddenImages = document.querySelectorAll('.gafa-gallery-img[style*="display: none"]');
-            for(let i=0; i<6 && i<hiddenImages.length; i++) {
-                hiddenImages[i].style.display = 'block';
-            }
-            if(document.querySelectorAll('.gafa-gallery-img[style*="display: none"]').length === 0) {
-                document.getElementById('load-more-btn').style.display = 'none';
-            }
-        }
-    </script>
+    <script src="main.js"></script>
     <script>
         // File Upload UI Logic
         function handleFileSelect(event) {
@@ -470,26 +468,59 @@
             }
         }
 
-        // Form Submit Simulation
-        function handleMembershipSubmit(event) {
-            event.preventDefault(); // Verhindert echten Seiten-Reload
+        // Real Form Submit via Cloudflare Worker + Turnstile
+        async function handleMembershipSubmit(event) {
+            event.preventDefault();
             
             const btn = document.getElementById('submit-btn');
             const form = document.getElementById('membership-form');
             const successMsg = document.getElementById('success-message');
-            
-            // Lade-Status anzeigen
+            const errorMsg = document.getElementById('form-error');
+            errorMsg.style.display = 'none';
+
+            const turnstileToken = document.querySelector('[name="cf-turnstile-response"]')?.value || '';
+            if (!turnstileToken) {
+                errorMsg.textContent = 'Bitte bestätigen Sie die Sicherheitsprüfung (Spam-Schutz) vor dem Absenden.';
+                errorMsg.style.display = 'block';
+                return;
+            }
+
             const originalText = btn.innerHTML;
             btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Wird gesendet...';
             btn.style.opacity = '0.8';
             btn.disabled = true;
-            
-            // Simuliere Ladezeit (in echt würde hier ein fetch() zum Backend gehen)
-            setTimeout(() => {
-                form.style.display = 'none';
-                successMsg.style.display = 'block';
-                // Hier in Zukunft: Mail-Versand via Cloudflare Worker einbauen
-            }, 1500);
+
+            try {
+                const fd = new FormData(form);
+                fd.append('type', 'gafa');
+                const fileInput = document.getElementById('application-file');
+                if (fileInput && fileInput.files[0]) {
+                    fd.set('file', fileInput.files[0]);
+                }
+
+                const res = await fetch('/api/submit-application', {
+                    method: 'POST',
+                    body: fd
+                });
+                const data = await res.json();
+
+                if (res.ok && data.success) {
+                    form.style.display = 'none';
+                    successMsg.style.display = 'block';
+                } else {
+                    errorMsg.textContent = data.error || 'Beim Senden ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.';
+                    errorMsg.style.display = 'block';
+                    if (window.turnstile) window.turnstile.reset();
+                }
+            } catch (err) {
+                errorMsg.textContent = 'Verbindungsfehler. Bitte versuchen Sie es später erneut.';
+                errorMsg.style.display = 'block';
+                if (window.turnstile) window.turnstile.reset();
+            }
+
+            btn.innerHTML = originalText;
+            btn.style.opacity = '1';
+            btn.disabled = false;
         }
     
         // Gallery Load More Logic
